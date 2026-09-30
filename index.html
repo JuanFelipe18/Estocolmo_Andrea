@@ -101,6 +101,8 @@
     </div>
     <button class="btn btn-primary" onclick="startGame()">¡Vamos a jugar! 🚀</button>
     <p class="text-sm text-center">Toca el botón para empezar (o ver cuánto falta ⏳)</p>
+    <!-- ⚙️ MODO PRUEBA: para ti (apenas visible pero fácil de encontrar) -->
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════
@@ -130,6 +132,10 @@
       <!-- ✏️ EDITABLE: mensaje de mientras tanto -->
       <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;font-weight:600;">Mientras tanto... descansa, toma un fika ☕🥐<br>y prepárate, que esto estará bueno 😏✨</p>
     </div>
+    <!-- ⚙️ MODO PRUEBA: para ti -->
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
+    <div style="display:none">
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════
@@ -151,7 +157,7 @@
     <div class="feedback" id="feedback"></div>
     <button class="btn btn-primary" id="btn-next" style="display:none" onclick="nextAfterAnswer()">Siguiente ➡️</button>
     <!-- ⚙️ MODO PRUEBA: botón oculto para ti (revisar sin restricciones) -->
-    <button class="btn btn-ghost" style="font-size:0.75rem;opacity:0.4" onclick="openAdmin()">⚙️ modo prueba</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════
@@ -185,7 +191,7 @@
     <p class="password-error" id="password-error"></p>
     <button class="btn btn-primary" onclick="checkFinalPassword()">Descubrir la sorpresa 🎁</button>
     <!-- ⚙️ MODO PRUEBA: botón oculto para ti -->
-    <button class="btn btn-ghost" style="font-size:0.75rem;opacity:0.4" onclick="openAdmin()">⚙️ modo prueba</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════
