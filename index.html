@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tu Reto Semanal 🎵</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0c1a;--card:#1a1530;--accent:#f7c948;--accent2:#ff6b6b;--accent3:#6bcbff;--green:#4ade80;--text:#f0eaff;--muted:#9d8fc0;--radius:20px;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;position:relative;}
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .stars::before,.stars::after{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 30% 40%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 55% 20%,rgba(255,255,255,0.7) 0%,transparent 100%),radial-gradient(1px 1px at 75% 60%,rgba(255,255,255,0.5) 0%,transparent 100%),radial-gradient(2px 2px at 80% 10%,rgba(247,201,72,0.5) 0%,transparent 100%),radial-gradient(2px 2px at 15% 90%,rgba(107,203,255,0.4) 0%,transparent 100%);}
+  .wrapper{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
+  .screen{display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;gap:20px;}
+  .screen.active{display:flex;animation:fadeUp 0.5s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .intro-icon{font-size:80px;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(247,201,72,0.5));}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  h1{font-family:'Fredoka One',cursive;font-size:2.2rem;text-align:center;line-height:1.1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{text-align:center;color:var(--muted);font-size:1rem;font-weight:600;line-height:1.5;}
+  .card{background:var(--card);border-radius:var(--radius);padding:22px 20px;width:100%;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+  .progress-wrap{width:100%;display:flex;flex-direction:column;gap:8px;}
+  .progress-label{display:flex;justify-content:space-between;font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .progress-bar{height:8px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+  /* ═══ LETRAS OBTENIDAS (pantalla de pruebas) ═══ */
+  .letters-row{display:flex;gap:10px;justify-content:center;width:100%;}
+  .letter-slot{width:44px;height:52px;border-radius:12px;background:rgba(255,255,255,0.05);border:2px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--accent);}
+  .letter-slot.got{background:rgba(247,201,72,0.12);border:2px solid var(--accent);box-shadow:0 0 14px rgba(247,201,72,0.3);}
+  .challenge-num{font-family:'Fredoka One',cursive;font-size:0.85rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+  .challenge-text{font-size:1.05rem;font-weight:700;line-height:1.5;color:var(--text);}
+  .btn{width:100%;padding:16px;border:none;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;transition:transform 0.15s ease;letter-spacing:0.5px;}
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),#f0a030);color:#1a1000;box-shadow:0 4px 20px rgba(247,201,72,0.35);}
+  .btn-secondary{background:linear-gradient(135deg,var(--green),#22c55e);color:#001a08;box-shadow:0 4px 20px rgba(74,222,128,0.35);}
+  .btn-ghost{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid rgba(255,255,255,0.1);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;}
+  .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:10;}
+  /* ═══ RELOJ / CUENTA REGRESIVA ═══ */
+  .clock-box{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;border:1px solid rgba(255,255,255,0.07);text-align:center;}
+  .clock-label{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .clock-time{font-family:'Fredoka One',cursive;font-size:2.6rem;color:var(--accent3);line-height:1;}
+  .clock-city{font-size:0.85rem;color:var(--muted);font-weight:700;margin-top:6px;}
+  .countdown-box{background:rgba(247,201,72,0.08);border:1px solid rgba(247,201,72,0.25);border-radius:16px;padding:16px 20px;text-align:center;width:100%;}
+  .countdown-label{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .countdown-time{font-family:'Fredoka One',cursive;font-size:2.4rem;color:var(--accent);line-height:1;}
+  .countdown-days{font-size:1rem;color:var(--muted);font-weight:700;margin-top:8px;}
+  /* ═══ OPCIONES DE RESPUESTA ═══ */
+  .opts{display:flex;flex-direction:column;gap:10px;width:100%;}
+  .opt{width:100%;padding:14px 18px;border-radius:14px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text);cursor:pointer;text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.15s;}
+  .opt:active{transform:scale(0.98);}
+  .opt.correct{border-color:var(--green);background:rgba(74,222,128,0.15);color:var(--green);}
+  .opt.wrong{border-color:var(--accent2);background:rgba(255,107,107,0.12);color:var(--accent2);}
+  .opt.reveal{border-color:var(--green);background:rgba(74,222,128,0.1);}
+  .opt:disabled{cursor:default;}
+  .feedback{text-align:center;font-size:0.9rem;font-weight:700;line-height:1.5;min-height:40px;}
+  .feedback.good{color:var(--green);}
+  .feedback.bad{color:var(--accent2);}
+  /* ═══ PANTALLA DE LETRA GANADA ═══ */
+  .letter-emoji{font-size:60px;text-align:center;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+  .letter-big{font-family:'Fredoka One',cursive;font-size:5rem;line-height:1;color:var(--accent);text-align:center;text-shadow:0 0 30px rgba(247,201,72,0.5);animation:pop 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+  .letter-msg{font-size:1.05rem;line-height:1.6;text-align:center;font-weight:700;}
+  .letter-msg strong{color:var(--green);}
+  /* ═══ PANTALLA FINAL (CONTRASEÑA) ═══ */
+  .password-input{width:100%;padding:16px;border-radius:14px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text);font-family:'Fredoka One',cursive;font-size:1.6rem;letter-spacing:8px;text-align:center;text-transform:uppercase;outline:none;}
+  .password-input:focus{border-color:var(--accent);}
+  .password-error{text-align:center;color:var(--accent2);font-size:0.85rem;font-weight:700;min-height:20px;}
+  /* ═══ PANTALLA SORPRESA ═══ */
+  .surprise-img{width:100%;max-width:380px;border-radius:var(--radius);border:2px solid rgba(247,201,72,0.35);box-shadow:0 0 30px rgba(247,201,72,0.2);animation:pop 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+  .surprise-msg{font-size:1.05rem;line-height:1.7;text-align:center;font-weight:600;white-space:pre-line;}
+  .final-emoji{font-size:72px;text-align:center;animation:spinIn 0.8s cubic-bezier(0.34,1.56,0.64,1);}
+  @keyframes spinIn{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0deg)}}
+  /* ═══ MODAL MODO PRUEBA (solo tú) ═══ */
+  .modal-back{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;}
+  .modal-box{background:var(--card);border-radius:var(--radius);padding:24px;width:100%;max-width:360px;border:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:16px;}
+  .modal-title{font-family:'Fredoka One',cursive;font-size:1.3rem;text-align:center;color:var(--accent);}
+  .modal-input{width:100%;padding:14px 16px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:var(--text);font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;outline:none;text-align:center;}
+  .text-center{text-align:center;}
+  .text-sm{font-size:0.85rem;color:var(--muted);}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="stars"></div>
+<div class="wrapper">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 1: PRESENTACIÓN (INTRO)
+       Ya NO menciona GPS ni lugares. Solo el reto.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-intro">
+    <div style="height:20px"></div>
+    <div class="intro-icon">🎵</div>
+    <h1>Tu Reto Semanal</h1>
+    <!-- ✏️ EDITABLE: texto de presentación -->
+    <p class="subtitle">Tus hermanitoos 🎶🎵 te quieren distraer<br>por una semana...<br><br>¿Te mides al reto? 😏✨</p>
+    <div class="card" style="text-align:center;">
+      <!-- ✏️ EDITABLE: explicación breve del juego -->
+      <p style="font-size:0.95rem;line-height:1.6;color:var(--muted);font-weight:600;">Cada día tendrás una <strong style="color:var(--text)">prueba</strong> que resolver 📋<br><br>Cada acierto te da <strong style="color:var(--accent)">una letra secreta</strong> 🔤<br><br>Al final de la semana, junta todas las letras y descubre <strong style="color:var(--accent2)">la sorpresa</strong> 🎁</p>
+    </div>
+    <button class="btn btn-primary" onclick="startGame()">¡Vamos a jugar! 🚀</button>
+    <p class="text-sm text-center">Toca el botón para empezar (o ver cuánto falta ⏳)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 2: TODAVÍA NO ES LA HORA
+       Muestra reloj con hora actual de Estocolmo + cuenta regresiva.
+       Se abre automáticamente cuando llegue la fecha.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-early">
+    <div style="height:10px"></div>
+    <div style="font-size:80px;text-align:center;">⏳</div>
+    <h1 style="font-size:1.9rem;">¡Todavía no es la hora!</h1>
+    <div class="card" style="text-align:center;">
+      <!-- ✏️ EDITABLE: mensaje mientras espera -->
+      <p style="font-size:1.05rem;line-height:1.7;font-weight:700;">Calma, impaciente 😄<br>El reto <strong style="color:var(--accent)">empieza el lunes 5 de octubre</strong><br>a las <strong style="color:var(--accent)">7:00 pm</strong> (hora de Estocolmo) 🇸🇪</p>
+    </div>
+    <div class="clock-box">
+      <div class="clock-label">🕐 Hora actual en Estocolmo</div>
+      <div class="clock-time" id="clock-time">--:--:--</div>
+      <div class="clock-city">Suecia 🇸🇪</div>
+    </div>
+    <div class="countdown-box">
+      <div class="countdown-label">⏳ Faltan</div>
+      <div class="countdown-time" id="countdown-time">--:--:--</div>
+      <div class="countdown-days" id="countdown-days"></div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 20px;">
+      <!-- ✏️ EDITABLE: mensaje de mientras tanto -->
+      <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;font-weight:600;">Mientras tanto... descansa, toma un fika ☕🥐<br>y prepárate, que esto estará bueno 😏✨</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 3: PRUEBA DEL DÍA (pregunta + opciones)
+       Las preguntas se configuran en el arreglo CHALLENGES más abajo.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-challenge">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progreso del reto</span><span id="progress-text">Prueba 1 / 5</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <!-- Letras conseguidas hasta ahora -->
+    <div class="letters-row" id="letters-row"></div>
+    <div class="card">
+      <div class="challenge-num" id="challenge-num">Prueba 1 de 5</div>
+      <div class="challenge-text" id="challenge-text"></div>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn btn-primary" id="btn-next" style="display:none" onclick="nextAfterAnswer()">Siguiente ➡️</button>
+    <!-- ⚙️ MODO PRUEBA: botón oculto para ti (revisar sin restricciones) -->
+    <button class="btn btn-ghost" style="font-size:0.75rem;opacity:0.4" onclick="openAdmin()">⚙️ modo prueba</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 4: LETRA GANADA
+       Se muestra después de cada acierto. NO EDITAR (texto fijo pedido).
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-letter">
+    <div class="letter-emoji">🔓</div>
+    <h1 style="font-size:1.8rem;">¡Respuesta correcta!</h1>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px;align-items:center;">
+      <div class="letter-big" id="letter-big">?</div>
+      <div class="letter-msg">Guarda esta letra, te servirá al final, <strong>no la olvides</strong> 🧠✨</div>
+    </div>
+    <button class="btn btn-secondary" id="btn-letter-next" onclick="afterLetter()">Continuar ➡️</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 5: CONTRASEÑA FINAL
+       La hermana ingresa las letras reunidas para desbloquear la sorpresa.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-password">
+    <div style="height:10px"></div>
+    <div style="font-size:64px;text-align:center;">🔑</div>
+    <h1 style="font-size:1.9rem;">Último paso...</h1>
+    <div class="card" style="text-align:center;">
+      <p style="font-size:1rem;line-height:1.6;font-weight:700;">Juntaste todas las letras 🔤<br>Ahora escribe la palabra que forman<br>para descubrir tu <strong style="color:var(--accent2)">sorpresa</strong> 🎁</p>
+    </div>
+    <div class="letters-row" id="letters-row-final"></div>
+    <input class="password-input" id="password-input" type="text" maxlength="10" placeholder="_____"
+      onkeydown="if(event.key==='Enter')checkFinalPassword()">
+    <p class="password-error" id="password-error"></p>
+    <button class="btn btn-primary" onclick="checkFinalPassword()">Descubrir la sorpresa 🎁</button>
+    <!-- ⚙️ MODO PRUEBA: botón oculto para ti -->
+    <button class="btn btn-ghost" style="font-size:0.75rem;opacity:0.4" onclick="openAdmin()">⚙️ modo prueba</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PANTALLA 6: SORPRESA
+       ✏️ EDITABLE: cambia la URL de la imagen (src) y el mensaje.
+       Los emoticones funcionan: solo cópialos y péguelos 😊🎉
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-surprise">
+    <div class="final-emoji">🎉</div>
+    <!-- ✏️ EDITABLE: título superior -->
+    <h1 style="font-size:2.2rem;">Sorpresa</h1>
+    <!-- ✏️ EDITABLE: reemplaza el src por la URL de tu imagen -->
+    <img class="surprise-img" src="https://placehold.co/600x400/1a1530/f7c948?text=Tu+Imagen+Aqu%C3%AD+%F0%9F%93%B8" alt="Sorpresa">
+    <div class="card">
+      <!-- ✏️ EDITABLE: INSERTE MENSAJE AQUÍ (admite emoticones, copia y pega) -->
+      <p class="surprise-msg">Inserte mensaje aquí 💌
+Escribe aquí tu mensaje para tu hermana...
+Puedes usar emoticones: 🎂🥂✈️🇸🇪💛😊🎁</p>
+    </div>
+    <button class="btn btn-primary" onclick="celebrate()">¡Celebrar! 🎊</button>
+  </div>
+
+</div>
+
+<!-- ⚙️ MODAL MODO PRUEBA: contraseña secreta SOLO para ti -->
+<div class="modal-back" id="admin-modal" style="display:none">
+  <div class="modal-box">
+    <p class="modal-title">Modo prueba 🛠️</p>
+    <input class="modal-input" id="admin-input" type="password" placeholder="Contraseña de prueba"
+      onkeydown="if(event.key==='Enter')checkAdmin()">
+    <p id="admin-error" style="text-align:center;color:var(--accent2);font-size:0.85rem;font-weight:700;min-height:20px;"></p>
+    <!-- Estas opciones aparecen solo si la contraseña es correcta -->
+    <div id="admin-actions" style="display:none;flex-direction:column;gap:10px;">
+      <button class="btn btn-secondary" onclick="adminSkipTo(0)">Ir a prueba 1 📝</button>
+      <button class="btn btn-secondary" onclick="adminSkipTo(4)">Ir a última prueba 📝</button>
+      <button class="btn btn-primary" onclick="adminSkipToPassword()">Ir a contraseña final 🔑</button>
+      <button class="btn btn-primary" onclick="adminSkipToSurprise()">Ver pantalla Sorpresa 🎁</button>
+    </div>
+    <button class="btn btn-ghost" onclick="closeAdmin()">Cerrar</button>
+  </div>
+</div>
+
+<div class="confetti-wrap" id="confetti"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ⚙️ ZONA DE CONFIGURACIÓN — AQUÍ EDITAS TODO LO IMPORTANTE
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* 🔓 FECHA Y HORA DE APERTURA
+   Lunes 5 de octubre de 2026, 19:00 hora de Estocolmo (UTC+2 en octubre).
+   Formato: Date.UTC(año, mes-1, día, horaUTC, minutos)
+   19:00 Estocolmo = 17:00 UTC → por eso va 17. */
+const UNLOCK_UTC = Date.UTC(2026, 9, 5, 17, 0, 0);
+
+/* 🔑 CONTRASEÑA FINAL = las letras de cada prueba, en orden.
+   Si cambias las letras en CHALLENGES, la contraseña cambia sola.
+   (También puedes escribirla manualmente aquí si prefieres otra palabra.) */
+function finalPassword(){ return CHALLENGES.map(c => c.letter).join('').toUpperCase(); }
+
+/* 🛠️ TU CONTRASEÑA SECRETA DE MODO PRUEBA (solo tú la sabes).
+   Cámbiala por lo que quieras. Con ella puedes saltar a cualquier
+   pantalla y probar que todo funciona sin esperar la fecha. */
+const ADMIN_PASSWORD = 'prueba123';
+
+/* ✏️ LAS 5 PRUEBAS — EDITA AQUÍ PREGUNTAS, OPCIONES Y LETRAS
+   - q: el enunciado de la prueba
+   - opts: las 4 opciones de respuesta
+   - correct: número (0-3) de la opción correcta (0 = la primera)
+   - letter: LA LETRA que se revela si acierta (¡que formen una palabra!)
+   - good / bad: mensajes si acierta o falla
+   💡 Las 5 letras en orden forman la palabra final (ej: A-M-O-R-X) */
+const CHALLENGES = [
+  { q:"¿PREGUNTA 1? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"S",
+    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
+  { q:"¿PREGUNTA 2? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"O",
+    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
+  { q:"¿PREGUNTA 3? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"R",
+    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
+  { q:"¿PREGUNTA 4? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"P",
+    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
+  { q:"¿PREGUNTA 5? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"R",
+    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" }
+];
+/* ☝️ Con las letras de arriba la palabra final sería "SORPR".
+   Cámbialas para que formen TU palabra (ej: AMOR, FELIZ, SORPRESA...).
+   Si quieres más de 5 letras, agrega más objetos al arreglo. */
+
+/* ═══════════════════════════════════════════════════════════════════
+   FIN DE LA ZONA DE CONFIGURACIÓN — de aquí en adelante es la lógica
+   (no necesitas tocar nada, salvo que quieras cambiar textos fijos)
+   ═══════════════════════════════════════════════════════════════════ */
+
+let currentIndex = 0;
+let lettersEarned = [];
+let answered = false;
+let isAdmin = false; // true cuando entras con la contraseña de prueba
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function isUnlocked(){ return isAdmin || Date.now() >= UNLOCK_UTC; }
+
+/* ─── Inicio del juego ─── */
+function startGame(){
+  if(!isUnlocked()){ showScreen('screen-early'); startClocks(); return; }
+  currentIndex = 0; lettersEarned = [];
+  loadChallenge(0);
+  showScreen('screen-challenge');
+}
+
+/* ─── Reloj Estocolmo + cuenta regresiva (pantalla "todavía no") ─── */
+let clockInterval = null;
+function startClocks(){
+  if(clockInterval) clearInterval(clockInterval);
+  const fmt = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  const fmtDay = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',weekday:'long',day:'numeric',month:'long'});
+  function tick(){
+    // Hora actual de Estocolmo
+    document.getElementById('clock-time').textContent = fmt.format(new Date());
+    const diff = UNLOCK_UTC - Date.now();
+    if(diff <= 0){ clearInterval(clockInterval); startGame(); return; }
+    const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000),
+          m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+    document.getElementById('countdown-time').textContent =
+      (d>0 ? String(d)+'d ' : '') + `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    document.getElementById('countdown-days').textContent =
+      `📅 Será el ${fmtDay.format(new Date(UNLOCK_UTC))} a las 19:00 🇸🇪`;
+  }
+  tick(); clockInterval = setInterval(tick, 1000);
+}
+
+/* ─── Cargar prueba actual ─── */
+function loadChallenge(i){
+  currentIndex = i;
+  answered = false;
+  const ch = CHALLENGES[i];
+  document.getElementById('challenge-num').textContent = `Prueba ${i+1} de ${CHALLENGES.length}`;
+  document.getElementById('challenge-text').textContent = ch.q;
+  document.getElementById('progress-text').textContent = `Prueba ${i+1} / ${CHALLENGES.length}`;
+  document.getElementById('progress-fill').style.width = `${(i/CHALLENGES.length)*100}%`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('btn-next').style.display = 'none';
+  renderLetters();
+  const optsEl = document.getElementById('opts');
+  optsEl.innerHTML = '';
+  ch.opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt'; btn.textContent = opt;
+    btn.onclick = () => answer(idx);
+    optsEl.appendChild(btn);
+  });
+}
+
+/* ─── Dibujar las letras ganadas / pendientes ─── */
+function renderLetters(){
+  const row = document.getElementById('letters-row');
+  row.innerHTML = '';
+  CHALLENGES.forEach((c, idx) => {
+    const slot = document.createElement('div');
+    const earned = lettersEarned[idx];
+    slot.className = 'letter-slot' + (earned ? ' got' : '');
+    slot.textContent = earned ? earned : '?';
+    row.appendChild(slot);
+  });
+}
+
+/* ─── Responder la prueba ─── */
+function answer(chosen){
+  if(answered) return;
+  answered = true;
+  const ch = CHALLENGES[currentIndex];
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach(b => b.disabled = true);
+  const fb = document.getElementById('feedback');
+  if(chosen === ch.correct){
+    opts[chosen].classList.add('correct');
+    fb.textContent = '✅ ' + ch.good; fb.className = 'feedback good';
+    lettersEarned[currentIndex] = ch.letter;
+    renderLetters();
+    const btnNext = document.getElementById('btn-next');
+    btnNext.style.display = 'block';
+    btnNext.textContent = 'Revelar mi letra 🔓';
+    btnNext.onclick = showLetter;
+  } else {
+    opts[chosen].classList.add('wrong');
+    opts[ch.correct].classList.add('reveal');
+    fb.textContent = '❌ ' + ch.bad; fb.className = 'feedback bad';
+    const btnNext = document.getElementById('btn-next');
+    btnNext.style.display = 'block';
+    btnNext.textContent = 'Reintentar 🔄';
+    btnNext.onclick = () => loadChallenge(currentIndex); // se puede reintentar
+  }
+}
+
+/* ─── Mostrar la letra ganada ─── */
+function showLetter(){
+  document.getElementById('letter-big').textContent = CHALLENGES[currentIndex].letter;
+  launchConfetti(15);
+  showScreen('screen-letter');
+}
+
+/* ─── Después de ver la letra: siguiente prueba o contraseña final ─── */
+function afterLetter(){
+  if(currentIndex < CHALLENGES.length - 1){
+    loadChallenge(currentIndex + 1);
+    showScreen('screen-challenge');
+  } else {
+    showPasswordScreen();
+  }
+}
+
+/* ─── Pantalla de contraseña final ─── */
+function showPasswordScreen(){
+  document.getElementById('progress-fill').style.width = '100%';
+  renderLettersFinal();
+  document.getElementById('password-input').value = '';
+  document.getElementById('password-error').textContent = '';
+  showScreen('screen-password');
+}
+
+function renderLettersFinal(){
+  const row = document.getElementById('letters-row-final');
+  row.innerHTML = '';
+  CHALLENGES.forEach((c, idx) => {
+    const slot = document.createElement('div');
+    const earned = lettersEarned[idx];
+    slot.className = 'letter-slot' + (earned ? ' got' : '');
+    slot.textContent = earned ? earned : '?';
+    row.appendChild(slot);
+  });
+}
+
+function checkFinalPassword(){
+  const val = document.getElementById('password-input').value.trim().toUpperCase();
+  if(val === finalPassword()){
+    launchConfetti(30);
+    showScreen('screen-surprise');
+    setTimeout(() => launchConfetti(30), 500);
+  } else {
+    document.getElementById('password-error').textContent = 'Palabra incorrecta... revisa tus letras 🔤🙈';
+  }
+}
+
+/* ─── ⚙️ MODO PRUEBA (solo tú): revisar todo sin restricciones ─── */
+function openAdmin(){
+  document.getElementById('admin-input').value = '';
+  document.getElementById('admin-error').textContent = '';
+  document.getElementById('admin-actions').style.display = 'none';
+  const m = document.getElementById('admin-modal');
+  m.style.display = 'flex';
+  setTimeout(() => document.getElementById('admin-input').focus(), 100);
+}
+function closeAdmin(){ document.getElementById('admin-modal').style.display = 'none'; }
+
+function checkAdmin(){
+  const val = document.getElementById('admin-input').value.trim();
+  if(val === ADMIN_PASSWORD){
+    isAdmin = true;
+    if(clockInterval) clearInterval(clockInterval);
+    document.getElementById('admin-actions').style.display = 'flex';
+    document.getElementById('admin-error').textContent = '✅ Modo prueba activado';
+  } else {
+    document.getElementById('admin-error').textContent = 'Contraseña incorrecta 🙈';
+    document.getElementById('admin-input').value = '';
+  }
+}
+
+/* Saltar a cualquier parte para probar (requiere modo prueba activado) */
+function adminSkipTo(i){
+  currentIndex = i; lettersEarned = [];
+  for(let k = 0; k < i; k++) lettersEarned[k] = CHALLENGES[k].letter; // letras anteriores como ganadas
+  loadChallenge(i);
+  closeAdmin();
+  showScreen('screen-challenge');
+}
+function adminSkipToPassword(){
+  lettersEarned = CHALLENGES.map(c => c.letter); // todas las letras ganadas
+  closeAdmin();
+  showPasswordScreen();
+}
+function adminSkipToSurprise(){
+  lettersEarned = CHALLENGES.map(c => c.letter);
+  closeAdmin();
+  launchConfetti(30);
+  showScreen('screen-surprise');
+}
+
+/* ─── Confeti y celebración ─── */
+function celebrate(){ launchConfetti(40); }
+function launchConfetti(count){
+  const container = document.getElementById('confetti');
+  const colors = ['#f7c948','#ff6b6b','#6bcbff','#4ade80','#ff9ecd','#fff'];
+  for(let i = 0; i < count; i++){
+    setTimeout(() => {
+      const el = document.createElement('div');
+      const size = 8 + Math.random()*10;
+      el.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>0.5?'50%':'3px'};left:${Math.random()*100}%;top:-20px;animation:fall ${1.5+Math.random()*2}s ease-in forwards;`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i*60);
+  }
+}
+const st = document.createElement('style');
+st.textContent = '@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}';
+document.head.appendChild(st);
+</script>
+</body>
+</html>
