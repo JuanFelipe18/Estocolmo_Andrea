@@ -140,7 +140,7 @@
       <div class="countdown-time" id="countdown-time">--:--:--</div>
       <div class="countdown-days" id="countdown-days"></div>
     </div>
-    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🐀 Modo trampa</button>
   </div>
 
   <!-- PANTALLA 3: PRUEBA -->
@@ -162,7 +162,7 @@
     <div class="opts" id="opts"></div>
     <div class="feedback" id="feedback"></div>
     <button class="btn btn-primary" id="btn-next" style="display:none" onclick="nextAfterAnswer()">Siguiente ➡️</button>
-    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🐀 Modo trampa</button>
   </div>
 
   <!-- PANTALLA 4: CÓDIGO GANADO -->
@@ -205,7 +205,7 @@
       <p class="password-error" id="archive-error"></p>
       <button class="btn btn-primary" onclick="checkArchive()">Descifrar el archivo 🔓</button>
     </div>
-    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🐀 Modo trampa</button>
   </div>
 
   <!-- PANTALLA 6: REVELACIÓN FINAL -->
@@ -283,39 +283,39 @@ const ADMIN_PASSWORD = 'prueba123';
 const CHALLENGES = [
   {
     day:"DÍA 1", emoji:"🔢", gif:"reto2.gif", codeVideo:null, code:"03", type:"mcq",
-    q:"RETO 1 — EL NÚMERO ESCONDIDO 🔢\nObserven cuidadosamente la secuencia:\n2 — 6 — 12 — 20 — 30 — ?\n¿Qué número debería seguir?",
+    q:"EL NÚMERO ESCONDIDO 🔢\nObserven cuidadosamente la secuencia:\n2 — 6 — 12 — 20 — 30 — ?\n¿Qué número debería seguir?",
     opts:["A. 36","B. 40","C. 42","D. 44"],
     correct:2,
-    explain:"✅ RESPUESTA: C. 42\n\nLa secuencia sigue esta lógica:\n1 × 2 = 2\n2 × 3 = 6\n3 × 4 = 12\n4 × 5 = 20\n5 × 6 = 30\n6 × 7 = 42",
+    explain:"\nLa secuencia sigue esta lógica:\n1 × 2 = 2\n2 × 3 = 6\n3 × 4 = 12\n4 × 5 = 20\n5 × 6 = 30\n6 × 7 = 42",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... de Andrea lo espero, pero si Juan ayuda que triste 🐮"
   },
   {
     day:"DÍA 2", emoji:"🐓", gif:"reto3.gif", codeVideo:"rickroll.mp4", code:"02", type:"mcq",
-    q:"RETO 2 — PREGUNTA TRAMPA 😂\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
+    q:"FISICA DE PRIMARIA 🔢\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
     opts:["A. Izquierda","B. Derecha","C. Hacia abajo","D. Ninguno de los anteriores"],
     correct:3,
-    explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
+    explain:"\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... seguros?"
   },
   {
     day:"DÍA 3", emoji:"🧩", gif:null, codeVideo:null, code:"05", type:"sudoku",
-    q:"RETO 3 — SUDOKU EXPRÉS 🧩\nCompleta la cuadrícula interactiva. Cada fila, columna y bloque de 2x2 debe contener los números del 1 al 4 sin repetirse.",
+    q:"SUDOKU EXPRÉS 🧩\nCompleta la cuadrícula interactiva. Cada fila, columna y bloque de 2x2 debe contener los números del 1 al 4 sin repetirse.",
     opts:[], correct: -1,
     explain:"✅ RESPUESTA:\n1 2 3 4\n3 4 2 1\n2 1 4 3\n4 3 1 2",
-    good:"¡Prueba superada! 🎉", bad:""
+    good:"¡Prueba superada! 🎉", bad:"Enserio está dificil un 4x4? 😐"
   },
   {
     day:"DÍA 4", emoji:"🔍", gif:null, codeVideo:null, code:"01", type:"diff",
-    q:"RETO 4 — ENCONTRAR LAS DIFERENCIAS 🔍\nToca en la imagen inferior para marcar dónde están las 9 diferencias. ¡Tienes que encontrarlas todas!",
+    q:"ENCONTRAR LAS DIFERENCIAS 🔍\nToca en la imagen inferior para marcar dónde están las 9 diferencias. ¡Tienes que encontrarlas todas!",
     opts:[], correct: -1,
-    explain:"✅ RESPUESTA:\nEncontraste las 9 diferencias: el moño, la cola, el pasto, el sombrero, el pantalón, la caña, el balde, la planta y el flotador.",
-    good:"¡Prueba superada! 🎉", bad:""
+    explain:"\nEncontraste las 9 diferencias: el moño, la cola, el pasto, el sombrero, el pantalón, la caña, el balde, la planta y el flotador.",
+    good:"¡Prueba superada! 🎉", bad:"Honestamente, también me costó, Luisa solo vió 3 🫡"
   },
   {
     day:"DÍA 5", emoji:"🕵️", gif:"reto5.gif", codeVideo:null, code:"04", type:"mcq",
-    q:"RETO 5 — EL ASESINATO EN LA MANSIÓN 🏰\nUn famoso millonario fue encontrado muerto un domingo por la mañana temprano. Coartadas:\n- Esposa: \"Dormía profundamente\"\n- Mayordomo: \"Limpiando el armario\"\n- Jardinero: \"Podando rosales\"\n- Cocinera: \"Preparando el desayuno\"\n- Tutor: \"Corrigiendo exámenes de los niños\"\n\n¿Quién mintió y es el culpable?",
+    q:"EL ASESINATO EN LA MANSIÓN 🏰\nUn famoso millonario fue encontrado muerto un domingo por la mañana temprano. Coartadas:\n- Esposa: \"Dormía profundamente\"\n- Mayordomo: \"Limpiando el armario\"\n- Jardinero: \"Podando rosales\"\n- Cocinera: \"Preparando el desayuno\"\n- Tutor: \"Corrigiendo exámenes de los niños\"\n\n¿Quién mintió y es el culpable?",
     opts:[
       "A. La esposa, porque el disparo la debió haber despertado.",
       "B. El mayordomo, porque los armarios no se limpian a esas horas.",
@@ -323,25 +323,25 @@ const CHALLENGES = [
       "D. La cocinera, porque los millonarios suelen tener chefs, no cocineras."
     ],
     correct:2,
-    explain:"✅ RESPUESTA: C. El tutor privado.\n\nEra domingo por la mañana, los niños no tienen escuela ni exámenes un domingo temprano. Inventó una coartada apresurada.",
+    explain:"\nEra domingo por la mañana, los niños no tienen escuela ni exámenes un domingo temprano. Inventó una coartada apresurada.",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... Piensen lógicamente en qué día de la semana ocurrió todo 🕵️"
   },
   {
     day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02", type:"mcq",
-    q:"RETO 6 — DOBLE SENTIDO 🧪\n¿Qué palabra significa para el ingeniero \"una mezcla homogénea de dos o más sustancias a nivel molecular\", pero para la abogada significa \"el acto legal de extinguir, terminar o deshacer un vínculo matrimonial o una sociedad mercantil\"?",
+    q:"DOBLE SENTIDO 🧪\n¿Qué palabra significa para el ingeniero \"una mezcla homogénea de dos o más sustancias a nivel molecular\", pero para la abogada significa \"el acto legal de extinguir, terminar o deshacer un vínculo matrimonial o una sociedad mercantil\"?",
     opts:["A. Reacción","B. Suspensión","C. Disolución","D. Fusión"],
     correct:2,
-    explain:"✅ RESPUESTA: C. Disolución.\n\nPara el químico es la disolución de un soluto en un solvente. Para la abogada es la disolución de un matrimonio (divorcio) o de una empresa.",
+    explain:"\nPara el químico es la disolución de un soluto en un solvente. Para la abogada es la disolución de un matrimonio (divorcio) o de una empresa.",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... Busquen una palabra que encaje exacto en ambos mundos 🧠"
   },
   {
     day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null, type:"mcq",
-    q:"RETO EXTRA — EL PADRE Y EL HIJO 👨‍👦\nUn padre tiene 45 años y su hijo tiene 15 años.\n¿En cuántos años el padre tendrá exactamente el doble de la edad de su hijo?",
+    q:"RETO FINAL — EL PADRE Y EL HIJO 👨‍👦\nUn padre tiene 45 años y su hijo tiene 15 años.\n¿En cuántos años el padre tendrá exactamente el doble de la edad de su hijo?",
     opts:["A. 10","B. 15","C. 20","D. Nunca"],
     correct:1,
-    explain:"✅ RESPUESTA: B. 15 años.\n\nEn 15 años:\nPadre: 45 + 15 = 60 años\nHijo: 15 + 15 = 30 años\n\nY: 60 = 2 × 30 ✔️\n\nEste reto es especial: no entrega código... todavía falta descubrir qué papel juega en la misión. 📁",
+    explain:"\nEn 15 años:\nPadre: 45 + 15 = 60 años\nHijo: 15 + 15 = 30 años\n\nY: 60 = 2 × 30 ✔️\n\nEste reto es especial: no entrega código... todavía falta descubrir qué papel juega en la misión. 📁",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... Luisa lo inventó, así de fácil es"
   }
@@ -553,7 +553,7 @@ function renderDifferences(container) {
 
    const img = document.createElement('img');
    // Asegúrate de que el nombre coincida con tu imagen base con las diferencias
-   img.src = 'WhatsApp Image 2026-10-01 at 2.25.00 PM.jpeg'; 
+   img.src = 'diferencias.jpeg'; 
    img.style.width = '100%';
    img.style.borderRadius = '14px';
    img.style.display = 'block';
