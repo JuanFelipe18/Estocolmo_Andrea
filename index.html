@@ -103,7 +103,7 @@
     </div>
     <button class="btn btn-primary" id="btn-start" onclick="startGame()">¿Aceptan el reto? 🟢</button>
     <p class="text-sm text-center" id="intro-progress"></p>
-    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🐀 Modo Trampa</button>
   </div>
 
   <!-- PANTALLA 2: BLOQUEADO -->
@@ -275,7 +275,7 @@ const CHALLENGES = [
     correct:2,
     explain:"✅ RESPUESTA: C. Eran 3 personas.\n\nLas tres personas eran:\n• El ABUELO\n• El PADRE\n• El HIJO\n\nEl abuelo es padre. El padre es, al mismo tiempo, hijo y padre. Y el hijo es hijo. Por eso son dos padres y dos hijos, pero solamente 3 personas.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... piénsenlo de nuevo 👀"
+    bad:"❌ Incorrecto... hasta yo la pensé un rato 😬"
   },
   {
     day:"DÍA 2", emoji:"🔢", gif:"reto2.gif", codeVideo:null, code:"02",
@@ -284,7 +284,7 @@ const CHALLENGES = [
     correct:2,
     explain:"✅ RESPUESTA: C. 42\n\nLa secuencia sigue esta lógica:\n1 × 2 = 2\n2 × 3 = 6\n3 × 4 = 12\n4 × 5 = 20\n5 × 6 = 30\n6 × 7 = 42",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... revisen la lógica de la secuencia 🤔"
+    bad:"❌ Incorrecto... de Andrea lo espero, pero si Juan ayuda que triste 🐮"
   },
   {
     day:"DÍA 3", emoji:"🐓", gif:"reto3.gif", codeVideo:"rickroll.mp4", code:"05",
@@ -293,7 +293,7 @@ const CHALLENGES = [
     correct:3,
     explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... lean la primera frase OTRA vez 👀"
+    bad:"❌ Incorrecto... seguros?"
   },
   {
     day:"DÍA 4", emoji:"🦇", gif:"reto4.gif", codeVideo:null, code:"01",
@@ -302,7 +302,7 @@ const CHALLENGES = [
     correct:0,
     explain:"✅ RESPUESTA: A. CIELO\n\nLas letras necesarias son: C — I — E — L — O\nTodas aparecen en MURCIÉLAGO y ninguna se repite.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... cuenten las letras de cada opción 🔤"
+    bad:"❌ Incorrecto... si saben leer esperaba que supieran contar 😐"
   },
   {
     day:"DÍA 5", emoji:"🧪", gif:"reto5.gif", codeVideo:null, code:"04",
@@ -311,7 +311,7 @@ const CHALLENGES = [
     correct:1,
     explain:"✅ RESPUESTA: B. Neutralización.\n\nCuando un ácido y una base reaccionan, generalmente ocurre una reacción de neutralización, en la que se forman nuevas sustancias, habitualmente una sal y agua.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... el laboratorio sigue en peligro 💥"
+    bad:"❌ Incorrecto... Juan... me decepcionas 🙃"
   },
   {
     day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02",
@@ -320,7 +320,7 @@ const CHALLENGES = [
     correct:1,
     explain:"✅ RESPUESTA: B.\n\nLa presunción de inocencia significa que una persona debe ser tratada como inocente mientras no exista una decisión judicial que establezca su culpabilidad, de acuerdo con las reglas aplicables.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... piensen en el 'mientras no exista condena' ⚖️"
+    bad:"❌ Incorrecto... grado, especialización y maestría, que tristeza 😒"
   },
   {
     day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null,
@@ -329,7 +329,7 @@ const CHALLENGES = [
     correct:1,
     explain:"✅ RESPUESTA: B. 15 años.\n\nEn 15 años:\nPadre: 45 + 15 = 60 años\nHijo: 15 + 15 = 30 años\n\nY: 60 = 2 × 30 ✔️\n\nEste reto es especial: no entrega código... todavía falta descubrir qué papel juega en la misión. 📁",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... prueben con una ecuación 🧮"
+    bad:"❌ Incorrecto... Luisa lo inventó, así de fácil es"
   }
 ];
 
@@ -522,7 +522,7 @@ function checkArchive(){
     showScreen('screen-surprise');
     setTimeout(() => launchConfetti(30), 500);
   } else {
-    document.getElementById('archive-error').textContent = 'Palabra incorrecta... extraigan bien las letras con sus códigos 🔢🙈';
+    document.getElementById('archive-error').textContent = 'Palabra incorrecta... Ni que fuera prueba de Harvard 🤌';
   }
 }
 
@@ -577,7 +577,7 @@ function checkAdmin(){
     document.getElementById('admin-actions').style.display = 'flex';
     document.getElementById('admin-error').textContent = '✅ Modo prueba activado';
   } else {
-    document.getElementById('admin-error').textContent = 'Contraseña incorrecta 🙈';
+    document.getElementById('admin-error').textContent = 'La contraseña no es "Contraseña", largo de aqui 🤬';
     document.getElementById('admin-input').value = '';
   }
 }
