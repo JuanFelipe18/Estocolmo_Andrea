@@ -8,7 +8,7 @@
 <style>
   :root{--bg:#0f0c1a;--card:#1a1530;--accent:#f7c948;--accent2:#ff6b6b;--accent3:#6bcbff;--green:#4ade80;--text:#f0eaff;--muted:#9d8fc0;--radius:20px;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;position:relative;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;position:relative; transition: background 0.5s;}
   .stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
   .stars::before,.stars::after{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 30% 40%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 55% 20%,rgba(255,255,255,0.7) 0%,transparent 100%),radial-gradient(1px 1px at 75% 60%,rgba(255,255,255,0.5) 0%,transparent 100%),radial-gradient(2px 2px at 80% 10%,rgba(247,201,72,0.5) 0%,transparent 100%),radial-gradient(2px 2px at 15% 90%,rgba(107,203,255,0.4) 0%,transparent 100%);}
   .wrapper{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;}
@@ -82,6 +82,21 @@
   .trip-dates{font-size:1rem;font-weight:800;color:var(--green);margin-top:8px;}
   .trip-days{font-size:0.9rem;color:var(--muted);font-weight:700;margin-top:4px;}
   .challenge-gif{width:100%;max-width:340px;border-radius:14px;display:block;margin:0 auto;}
+  
+  /* ESTILOS DE INFIERNO Y NUEVOS RETOS */
+  .hell-bg { background: radial-gradient(circle, #5a0000 0%, #1a0000 100%) !important; }
+  @keyframes hellShake {
+      0%, 100% {transform: translateX(0);}
+      20%, 60% {transform: translateX(-5px) rotate(-3deg);}
+      40%, 80% {transform: translateX(5px) rotate(3deg);}
+  }
+  .sudoku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; width: 220px; margin: 0 auto; border: 4px solid var(--accent); background: var(--accent); }
+  .sudoku-cell { width: 100%; aspect-ratio: 1; text-align: center; font-size: 1.8rem; font-family: 'Fredoka One', cursive; background: var(--card); color: var(--text); border: 1px solid rgba(255,255,255,0.2); outline: none; border-radius: 0; }
+  .sudoku-cell:nth-child(2n) { border-right: 4px solid var(--accent); }
+  .sudoku-cell:nth-child(4n) { border-right: none; }
+  .sudoku-cell:nth-child(n+5):nth-child(-n+8) { border-bottom: 4px solid var(--accent); }
+  .sudoku-cell.given { color: var(--accent); background: rgba(255,255,255,0.05); }
+  .sudoku-cell:focus { background: rgba(247,201,72,0.2); }
 </style>
 <base target="_blank">
 </head>
@@ -138,7 +153,11 @@
     <div class="card">
       <div class="challenge-num" id="challenge-num">Día 1</div>
       <div class="challenge-text" id="challenge-text"></div>
+      
+      <!-- CONTENEDOR PARA RETOS INTERACTIVOS (Sudoku / Diferencias) -->
+      <div id="custom-challenge-container" style="display:none; margin-top: 20px; width: 100%;"></div>
     </div>
+    
     <div class="opts" id="opts"></div>
     <div class="feedback" id="feedback"></div>
     <button class="btn btn-primary" id="btn-next" style="display:none" onclick="nextAfterAnswer()">Siguiente ➡️</button>
@@ -157,6 +176,13 @@
       <div style="font-size:0.95rem;font-weight:700;color:var(--muted);text-align:center;">🔢 <strong style="color:var(--accent)">Guárdenlo.</strong> No intenten descifrarlo todavía.</div>
     </div>
     <button class="btn btn-secondary" onclick="afterCode()">Lo guardé, continuar ➡️</button>
+  </div>
+
+  <!-- PANTALLA INFERNAL (TRANSICIÓN DÍA 2 AL 3) -->
+  <div class="screen" id="screen-hell" style="justify-content:center; text-align:center; min-height:80vh;">
+      <div style="font-size:100px; animation: hellShake 0.5s infinite;">😈</div>
+      <h1 style="color:#ff3333; text-shadow: 0 0 20px #ff0000; font-size:2.5rem; margin-top:20px; line-height:1.2;">¿Creíste que iba a ser así de fácil?</h1>
+      <p style="color:#ff9999; font-size:1.4rem; font-weight:800; margin-top:30px; letter-spacing:1px; animation: pop 1s ease;">Prepárate para mañana 🔥</p>
   </div>
 
   <!-- PANTALLA 5: ARCHIVO FINAL -->
@@ -201,7 +227,6 @@ Y una aventura que apenas comienza. 💛</p>
     </div>
     <div class="card" style="text-align:center;border-color:rgba(74,222,128,0.35);">
       <div class="sweden-title">🇸🇪 NOS VEMOS EN SUECIA 🇸🇪</div>
-      <!-- 📸 AQUÍ VA TU IMAGEN: sube tu foto (ej: foto.jpg) junto a este archivo y pon su nombre en src -->
       <img class="surprise-img" style="margin-top:16px"
            src="foto.jpeg"
            alt="Sorpresa"
@@ -249,37 +274,15 @@ Y una aventura que apenas comienza. 💛</p>
 
 <script>
 /* ═══════════════ ⚙️ CONFIGURACIÓN ═══════════════ */
-
-/* 🔓 RETO 1: lunes 5 de octubre de 2026, 19:00 Estocolmo (UTC+2 → 17:00 UTC).
-   Un reto por día durante 7 días. */
 const UNLOCK_UTC = Date.UTC(2026, 9, 5, 17, 0, 0);
 const HOURS_BETWEEN = 24;
-
-/* 🛠️ Contraseña del modo prueba */
 const ADMIN_PASSWORD = 'prueba123';
 
-/* ✏️ LOS 7 RETOS (del PDF).
-   - gif: nombre del archivo GIF que guardaste junto a este HTML (ej: "reto1.gif").
-     Si lo dejas en null, se muestra el emoji. ⚠️ Usa minúsculas/sin tildes en el nombre.
-   - codeVideo (solo reto del gallo): nombre del archivo de video con sonido
-     (ej: "gallo.mp4"), se reproduce en la pantalla del código. null = sin video.
-   - q: enunciado  |  opts: opciones  |  correct: índice (0 en adelante)
-   - code: el código numérico que entrega (null en el reto extra)
-   - explain: la explicación, SOLO se muestra al acertar (pantalla del código)
-   - good: mensaje al acertar  |  bad: mensaje al fallar (SIN revelar la respuesta) */
+/* NUEVA LISTA DE RETOS */
 const CHALLENGES = [
   {
-    day:"DÍA 1", emoji:"🎣", gif:"reto1.gif", codeVideo:null, code:"03",
-    q:"RETO 1 — EL VIAJE DE PESCA 🐟\nDos padres y dos hijos fueron a pescar. Cada uno pescó exactamente un pez. Al regresar a casa llevaban 3 peces en total.\n¿Cómo es posible?",
-    opts:["A. Uno de ellos perdió un pez","B. Uno de ellos no pescó realmente","C. Eran solamente 3 personas","D. Uno de los peces era compartido"],
-    correct:2,
-    explain:"✅ RESPUESTA: C. Eran 3 personas.\n\nLas tres personas eran:\n• El ABUELO\n• El PADRE\n• El HIJO\n\nEl abuelo es padre. El padre es, al mismo tiempo, hijo y padre. Y el hijo es hijo. Por eso son dos padres y dos hijos, pero solamente 3 personas.",
-    good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... hasta yo la pensé un rato 😬"
-  },
-  {
-    day:"DÍA 2", emoji:"🔢", gif:"reto2.gif", codeVideo:null, code:"02",
-    q:"RETO 2 — EL NÚMERO ESCONDIDO 🔢\nObserven cuidadosamente la secuencia:\n2 — 6 — 12 — 20 — 30 — ?\n¿Qué número debería seguir?",
+    day:"DÍA 1", emoji:"🔢", gif:"reto2.gif", codeVideo:null, code:"03", type:"mcq",
+    q:"RETO 1 — EL NÚMERO ESCONDIDO 🔢\nObserven cuidadosamente la secuencia:\n2 — 6 — 12 — 20 — 30 — ?\n¿Qué número debería seguir?",
     opts:["A. 36","B. 40","C. 42","D. 44"],
     correct:2,
     explain:"✅ RESPUESTA: C. 42\n\nLa secuencia sigue esta lógica:\n1 × 2 = 2\n2 × 3 = 6\n3 × 4 = 12\n4 × 5 = 20\n5 × 6 = 30\n6 × 7 = 42",
@@ -287,8 +290,8 @@ const CHALLENGES = [
     bad:"❌ Incorrecto... de Andrea lo espero, pero si Juan ayuda que triste 🐮"
   },
   {
-    day:"DÍA 3", emoji:"🐓", gif:"reto3.gif", codeVideo:"rickroll.mp4", code:"05",
-    q:"RETO 3 — PREGUNTA TRAMPA 😂\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
+    day:"DÍA 2", emoji:"🐓", gif:"reto3.gif", codeVideo:"rickroll.mp4", code:"02", type:"mcq",
+    q:"RETO 2 — PREGUNTA TRAMPA 😂\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
     opts:["A. Izquierda","B. Derecha","C. Hacia abajo","D. Ninguno de los anteriores"],
     correct:3,
     explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
@@ -296,34 +299,44 @@ const CHALLENGES = [
     bad:"❌ Incorrecto... seguros?"
   },
   {
-    day:"DÍA 4", emoji:"🦇", gif:"reto4.gif", codeVideo:null, code:"01",
-    q:"RETO 4 — LA PALABRA ESCONDIDA 🧠\nUtilizando únicamente letras de la palabra MURCIÉLAGO, ¿cuál de las siguientes palabras puede formarse sin repetir ninguna letra?",
-    opts:["A. CIELO","B. CAMISA","C. GUITARRA","D. PERRO"],
-    correct:0,
-    explain:"✅ RESPUESTA: A. CIELO\n\nLas letras necesarias son: C — I — E — L — O\nTodas aparecen en MURCIÉLAGO y ninguna se repite.",
-    good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... si saben leer esperaba que supieran contar 😐"
+    day:"DÍA 3", emoji:"🧩", gif:null, codeVideo:null, code:"05", type:"sudoku",
+    q:"RETO 3 — SUDOKU EXPRÉS 🧩\nCompleta la cuadrícula interactiva. Cada fila, columna y bloque de 2x2 debe contener los números del 1 al 4 sin repetirse.",
+    opts:[], correct: -1,
+    explain:"✅ RESPUESTA:\n1 2 3 4\n3 4 2 1\n2 1 4 3\n4 3 1 2",
+    good:"¡Prueba superada! 🎉", bad:""
   },
   {
-    day:"DÍA 5", emoji:"🧪", gif:"reto5.gif", codeVideo:null, code:"04",
-    q:"RETO 5 — ¡QUE NO EXPLOTE! 💥\nUn científico loco ha dejado una sustancia desconocida sobre la mesa. Antes de tocarla necesitan responder: ¿qué sucede generalmente cuando se mezcla un ácido con una base?",
-    opts:["A. Combustión","B. Neutralización","C. Evaporación instantánea","D. Congelación"],
-    correct:1,
-    explain:"✅ RESPUESTA: B. Neutralización.\n\nCuando un ácido y una base reaccionan, generalmente ocurre una reacción de neutralización, en la que se forman nuevas sustancias, habitualmente una sal y agua.",
-    good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... Juan... me decepcionas 🙃"
+    day:"DÍA 4", emoji:"🔍", gif:null, codeVideo:null, code:"01", type:"diff",
+    q:"RETO 4 — ENCONTRAR LAS DIFERENCIAS 🔍\nToca en la imagen inferior para marcar dónde están las 9 diferencias. ¡Tienes que encontrarlas todas!",
+    opts:[], correct: -1,
+    explain:"✅ RESPUESTA:\nEncontraste las 9 diferencias: el moño, la cola, el pasto, el sombrero, el pantalón, la caña, el balde, la planta y el flotador.",
+    good:"¡Prueba superada! 🎉", bad:""
   },
   {
-    day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02",
-    q:"RETO 6 — ¿CULPABLE... O NO? 🧑‍⚖️\nUna persona es acusada de cometer un delito. Sin embargo, todavía no existe una sentencia que determine que es culpable.\n¿Qué significa la presunción de inocencia?",
-    opts:["A. Que nunca puede ser condenada","B. Que debe ser considerada inocente mientras no exista una condena","C. Que la policía debe creerle siempre","D. Que puede ignorar cualquier investigación"],
-    correct:1,
-    explain:"✅ RESPUESTA: B.\n\nLa presunción de inocencia significa que una persona debe ser tratada como inocente mientras no exista una decisión judicial que establezca su culpabilidad, de acuerdo con las reglas aplicables.",
+    day:"DÍA 5", emoji:"🕵️", gif:"reto5.gif", codeVideo:null, code:"04", type:"mcq",
+    q:"RETO 5 — EL ASESINATO EN LA MANSIÓN 🏰\nUn famoso millonario fue encontrado muerto un domingo por la mañana temprano. Coartadas:\n- Esposa: \"Dormía profundamente\"\n- Mayordomo: \"Limpiando el armario\"\n- Jardinero: \"Podando rosales\"\n- Cocinera: \"Preparando el desayuno\"\n- Tutor: \"Corrigiendo exámenes de los niños\"\n\n¿Quién mintió y es el culpable?",
+    opts:[
+      "A. La esposa, porque el disparo la debió haber despertado.",
+      "B. El mayordomo, porque los armarios no se limpian a esas horas.",
+      "C. El tutor privado, porque es domingo y no se corrigen exámenes.",
+      "D. La cocinera, porque los millonarios suelen tener chefs, no cocineras."
+    ],
+    correct:2,
+    explain:"✅ RESPUESTA: C. El tutor privado.\n\nEra domingo por la mañana, los niños no tienen escuela ni exámenes un domingo temprano. Inventó una coartada apresurada.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... grado, especialización y maestría, que tristeza 😒"
+    bad:"❌ Incorrecto... Piensen lógicamente en qué día de la semana ocurrió todo 🕵️"
   },
   {
-    day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null,
+    day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02", type:"mcq",
+    q:"RETO 6 — DOBLE SENTIDO 🧪\n¿Qué palabra significa para el ingeniero \"una mezcla homogénea de dos o más sustancias a nivel molecular\", pero para la abogada significa \"el acto legal de extinguir, terminar o deshacer un vínculo matrimonial o una sociedad mercantil\"?",
+    opts:["A. Reacción","B. Suspensión","C. Disolución","D. Fusión"],
+    correct:2,
+    explain:"✅ RESPUESTA: C. Disolución.\n\nPara el químico es la disolución de un soluto en un solvente. Para la abogada es la disolución de un matrimonio (divorcio) o de una empresa.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... Busquen una palabra que encaje exacto en ambos mundos 🧠"
+  },
+  {
+    day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null, type:"mcq",
     q:"RETO EXTRA — EL PADRE Y EL HIJO 👨‍👦\nUn padre tiene 45 años y su hijo tiene 15 años.\n¿En cuántos años el padre tendrá exactamente el doble de la edad de su hijo?",
     opts:["A. 10","B. 15","C. 20","D. Nunca"],
     correct:1,
@@ -333,9 +346,9 @@ const CHALLENGES = [
   }
 ];
 
-/* 📁 Archivo Final: palabras + posición (según los códigos del PDF) */
+/* 📁 Archivo Final */
 const ARCHIVE_WORDS = ["MESA","LUNA","VERDE","CIELO","AQUÍ","PATO"];
-const ARCHIVE_POSITIONS = [3,2,5,1,4,2]; // los códigos 03-02-05-01-04-02
+const ARCHIVE_POSITIONS = [3,2,5,1,4,2]; 
 const FINAL_WORD = "SUECIA";
 
 /* ═══════════════ LÓGICA DEL JUEGO ═══════════════ */
@@ -344,14 +357,12 @@ let currentIndex = 0;
 let isAdmin = false;
 let clockInterval = null;
 
-/* ─── 💾 Progreso ─── */
 const CACHE_KEY = 'archivoX_v2';
 function saveProgress(data){ try{ localStorage.setItem(CACHE_KEY, JSON.stringify(data)); }catch(e){} }
 function loadProgress(){ try{ const r = localStorage.getItem(CACHE_KEY); return r ? JSON.parse(r) : { codes:[null,null,null,null,null,null], extraDone:false, finished:false, codesRevealed:false }; }catch(e){ return { codes:[null,null,null,null,null,null], extraDone:false, finished:false, codesRevealed:false }; } }
 function clearProgress(){ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} }
 function codesCount(){ return loadProgress().codes.filter(Boolean).length; }
 
-/* ─── Navegación ─── */
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -372,11 +383,9 @@ function updateIntro(){
     done > 0 ? `Progreso guardado automáticamente 💾 (${done}/6 códigos)` : '';
 }
 
-/* ─── Desbloqueo diario ─── */
 function stageUnlockTime(i){ return UNLOCK_UTC + i * HOURS_BETWEEN * 3600000; }
 function isStageOpen(i){ return isAdmin || Date.now() >= stageUnlockTime(i); }
 
-/* ─── Inicio ─── */
 function startGame(){
   if(clockInterval){ clearInterval(clockInterval); clockInterval = null; }
   const p = loadProgress();
@@ -402,7 +411,6 @@ function startGame(){
   showScreen('screen-challenge');
 }
 
-/* ─── Reloj + cuenta regresiva ─── */
 function startClocks(targetIndex){
   if(clockInterval) clearInterval(clockInterval);
   const target = stageUnlockTime(targetIndex);
@@ -422,7 +430,6 @@ function startClocks(targetIndex){
   tick(); clockInterval = setInterval(tick, 1000);
 }
 
-/* ─── Cargar prueba ─── */
 function loadChallenge(i){
   currentIndex = i;
   const ch = CHALLENGES[i];
@@ -439,17 +446,180 @@ function loadChallenge(i){
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('btn-next').style.display = 'none';
+  
   const optsEl = document.getElementById('opts');
+  const customContainer = document.getElementById('custom-challenge-container');
   optsEl.innerHTML = '';
-  ch.opts.forEach((opt, idx) => {
-    const btn = document.createElement('button');
-    btn.className = 'opt'; btn.textContent = opt;
-    btn.onclick = () => answer(idx, btn);
-    optsEl.appendChild(btn);
-  });
+  
+  if (ch.type === 'mcq') {
+      customContainer.style.display = 'none';
+      optsEl.style.display = 'flex';
+      ch.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt'; btn.textContent = opt;
+        btn.onclick = () => answer(idx, btn);
+        optsEl.appendChild(btn);
+      });
+  } else {
+      optsEl.style.display = 'none';
+      customContainer.style.display = 'block';
+      customContainer.innerHTML = '';
+      if(ch.type === 'sudoku') renderSudoku(customContainer);
+      if(ch.type === 'diff') renderDifferences(customContainer);
+  }
 }
 
-/* ─── Responder: fallar NO revela la respuesta correcta ─── */
+/* ─── RENDERERS DE NUEVOS JUEGOS ─── */
+function renderSudoku(container) {
+   const wrap = document.createElement('div');
+   wrap.className = 'sudoku-grid';
+   const initial = [0,0,0,4, 0,0,0,0, 2,0,0,3, 4,0,1,2];
+   initial.forEach((val) => {
+      const inp = document.createElement('input');
+      inp.className = 'sudoku-cell' + (val !== 0 ? ' given' : '');
+      inp.type = 'tel';
+      inp.maxLength = 1;
+      if(val !== 0) {
+         inp.value = val;
+         inp.readOnly = true;
+      }
+      wrap.appendChild(inp);
+   });
+   container.appendChild(wrap);
+
+   const btn = document.createElement('button');
+   btn.className = 'btn btn-secondary';
+   btn.style.marginTop = '20px';
+   btn.textContent = 'Comprobar Sudoku ✅';
+   btn.onclick = checkSudoku;
+   container.appendChild(btn);
+}
+
+function checkSudoku() {
+   const cells = document.querySelectorAll('.sudoku-cell');
+   const sol = [1,2,3,4, 3,4,2,1, 2,1,4,3, 4,3,1,2];
+   let ok = true;
+   cells.forEach((c, i) => { if(parseInt(c.value) !== sol[i]) ok = false; });
+   const fb = document.getElementById('feedback');
+   if(ok) {
+      fb.textContent = '✅ ¡Sudoku resuelto! 🎉'; fb.className = 'feedback good';
+      document.querySelectorAll('.sudoku-cell').forEach(c => c.readOnly = true);
+      const btnNext = document.getElementById('btn-next');
+      btnNext.style.display = 'block';
+      btnNext.textContent = 'Revelar mi código 🔓';
+      btnNext.onclick = () => showCodeScreen();
+      const p = loadProgress();
+      p.codes[currentIndex] = CHALLENGES[currentIndex].code;
+      saveProgress(p);
+   } else {
+      fb.textContent = '❌ Hay errores, revisa los números...'; fb.className = 'feedback bad';
+   }
+}
+
+let diffsFound = 0;
+let correctZones = [];
+function renderDifferences(container) {
+   // Coordenadas relativas de las 9 diferencias basadas en la imagen de solución
+   correctZones = [
+      {x: 0.26, y: 0.12, found: false}, // moño
+      {x: 0.13, y: 0.49, found: false}, // cola
+      {x: 0.27, y: 0.83, found: false}, // pasto inf izq
+      {x: 0.46, y: 0.31, found: false}, // sombrero
+      {x: 0.56, y: 0.64, found: false}, // pantalón
+      {x: 0.75, y: 0.18, found: false}, // caña
+      {x: 0.70, y: 0.55, found: false}, // balde
+      {x: 0.92, y: 0.46, found: false}, // planta der
+      {x: 0.92, y: 0.75, found: false}  // flotador
+   ];
+   let diffsFound = 0;
+   
+   const wrap = document.createElement('div');
+   wrap.style.position = 'relative';
+   wrap.style.display = 'inline-block';
+   wrap.style.width = '100%';
+
+   const img = document.createElement('img');
+   // Asegúrate de que el nombre coincida con tu imagen base con las diferencias
+   img.src = 'WhatsApp Image 2026-10-01 at 2.25.00 PM.jpeg'; 
+   img.style.width = '100%';
+   img.style.borderRadius = '14px';
+   img.style.display = 'block';
+
+   const markerLayer = document.createElement('div');
+   markerLayer.style.position = 'absolute';
+   markerLayer.style.inset = '0';
+   markerLayer.style.zIndex = '2';
+
+   wrap.appendChild(img);
+   wrap.appendChild(markerLayer);
+
+   const textWrap = document.createElement('div');
+   textWrap.style.fontWeight = 'bold';
+   textWrap.style.marginTop = '15px';
+   textWrap.style.textAlign = 'center';
+   textWrap.style.fontSize = '1.1rem';
+   textWrap.textContent = `Diferencias encontradas: 0 / 9`;
+
+   wrap.onclick = (e) => {
+      if(diffsFound >= 9) return;
+      const rect = wrap.getBoundingClientRect();
+      const clickX = (e.clientX - rect.left) / rect.width;
+      const clickY = (e.clientY - rect.top) / rect.height;
+
+      let hitIndex = -1;
+      for(let i=0; i<correctZones.length; i++){
+         const z = correctZones[i];
+         if(!z.found) {
+            // Calcula la distancia entre el toque y la coordenada correcta
+            const dist = Math.hypot(z.x - clickX, z.y - clickY);
+            if(dist < 0.12) { // 12% de margen de error para que no sea frustrante
+               hitIndex = i;
+               break;
+            }
+         }
+      }
+
+      // Si tocó en una zona correcta
+      if(hitIndex !== -1) {
+         correctZones[hitIndex].found = true;
+         diffsFound++;
+
+         // Dibuja el círculo rojo
+         const circle = document.createElement('div');
+         circle.style.position = 'absolute';
+         circle.style.left = (correctZones[hitIndex].x * 100) + '%';
+         circle.style.top = (correctZones[hitIndex].y * 100) + '%';
+         circle.style.width = '40px';
+         circle.style.height = '40px';
+         circle.style.border = '4px solid var(--accent2)';
+         circle.style.borderRadius = '50%';
+         circle.style.transform = 'translate(-50%, -50%)';
+         circle.style.boxShadow = '0 0 10px rgba(255,0,0,0.6)';
+         circle.style.animation = 'pop 0.3s ease';
+         markerLayer.appendChild(circle);
+
+         textWrap.textContent = `Diferencias encontradas: ${diffsFound} / 9`;
+
+         // Verifica si ya ganó
+         if(diffsFound >= 9) {
+            const fb = document.getElementById('feedback');
+            fb.textContent = '✅ ¡Todas las diferencias encontradas! 🎉';
+            fb.className = 'feedback good';
+            const btnNext = document.getElementById('btn-next');
+            btnNext.style.display = 'block';
+            btnNext.textContent = 'Revelar mi código 🔓';
+            btnNext.onclick = () => showCodeScreen();
+            const p = loadProgress();
+            p.codes[currentIndex] = CHALLENGES[currentIndex].code;
+            saveProgress(p);
+         }
+      }
+   };
+
+   container.appendChild(wrap);
+   container.appendChild(textWrap);
+}
+
 function answer(chosen, btnEl){
   const ch = CHALLENGES[currentIndex];
   const fb = document.getElementById('feedback');
@@ -473,11 +643,9 @@ function answer(chosen, btnEl){
 }
 function nextAfterAnswer(){}
 
-/* ─── Pantalla del código (explicación SOLO aquí) ─── */
 function showCodeScreen(){
   const ch = CHALLENGES[currentIndex];
   if(ch.code === null){
-    // Reto extra resuelto → DIRECTO al Archivo Final
     showArchive();
     return;
   }
@@ -492,9 +660,25 @@ function showCodeScreen(){
   launchConfetti(15);
   showScreen('screen-code');
 }
-function afterCode(){ goIntro(); }
 
-/* ─── Archivo Final ─── */
+function showHellTransition() {
+    document.body.classList.add('hell-bg');
+    showScreen('screen-hell');
+    setTimeout(() => {
+        document.body.classList.remove('hell-bg');
+        goIntro();
+    }, 5500); 
+}
+
+function afterCode(){ 
+  // Mostrar pantalla del infierno después del Día 2 (index 1)
+  if(currentIndex === 1) { 
+      showHellTransition();
+  } else {
+      goIntro(); 
+  }
+}
+
 function showArchive(){
   const p = loadProgress();
   const grid = document.getElementById('word-grid');
@@ -502,8 +686,6 @@ function showArchive(){
   ARCHIVE_WORDS.forEach((w, i) => {
     const cell = document.createElement('div');
     cell.className = 'word-cell';
-    // Los códigos NO se muestran: ellos deben recordar cómo usarlos.
-    // Solo aparecen si aceptaron el castigo (codesRevealed).
     cell.innerHTML = `<div class="word-num">Archivo 0${i+1}</div>
       <div class="word-name">${w}</div>` +
       (p.codesRevealed ? `<div class="word-code">Código: 🔢 ${p.codes[i] || '?'}</div>` : '');
@@ -526,7 +708,6 @@ function checkArchive(){
   }
 }
 
-/* ─── 😈 Castigo: recuperar códigos ─── */
 let mathAnswer = 0;
 function openForgot(){
   newMathProblem();
@@ -550,7 +731,7 @@ function checkMath(){
     document.getElementById('forgot-modal').style.display = 'none';
     const p = loadProgress();
     for(let i = 0; i < 6; i++) if(!p.codes[i]) p.codes[i] = CHALLENGES[i].code;
-    p.codesRevealed = true; // castigo cumplido: ahora sí se muestran los códigos
+    p.codesRevealed = true;
     saveProgress(p);
     showArchive();
   } else {
@@ -560,7 +741,6 @@ function checkMath(){
   }
 }
 
-/* ─── ⚙️ Modo prueba ─── */
 function openAdmin(){
   document.getElementById('admin-input').value = '';
   document.getElementById('admin-error').textContent = '';
@@ -602,7 +782,6 @@ function adminSkipToSurprise(){
 }
 function adminReset(){ clearProgress(); document.getElementById('admin-error').textContent = '✅ Progreso borrado'; }
 
-/* ─── Confeti ─── */
 function celebrate(){ launchConfetti(40); }
 function launchConfetti(count){
   const container = document.getElementById('confetti');
