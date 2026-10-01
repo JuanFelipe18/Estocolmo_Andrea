@@ -102,6 +102,7 @@
 <base target="_blank">
 </head>
 <body>
+<audio id="bgMusic" src="cancion.mp3" loop preload="auto"></audio>
 <div class="stars"></div>
 <div class="wrapper">
 
@@ -848,13 +849,18 @@ document.head.appendChild(st);
 
 updateIntro();
 // ====== AUDIO DE FONDO AL ENTRAR ======
-const bgAudio = new Audio('cancion.mp3'); // Asegúrate de que coincida con tu archivo
-bgAudio.loop = true; 
-bgAudio.volume = 0.5;
-
-// Esta función se ejecuta al tocar "¿Están listos?"
 function enterGame() {
-    bgAudio.play().catch(e => console.log("Audio bloqueado", e));
+    const bgAudio = document.getElementById('bgMusic');
+    bgAudio.volume = 0.5; // Ajusta el volumen al 50%
+    
+    // Forzar la reproducción
+    let playPromise = bgAudio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(e => {
+            console.log("Error al reproducir audio. Verifica que cancion.mp3 exista.", e);
+        });
+    }
+    
     updateIntro();
     showScreen('screen-intro');
 }
