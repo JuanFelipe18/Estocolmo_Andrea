@@ -574,16 +574,29 @@ function renderDifferences(container) {
 
    wrap.onclick = (e) => {
       if(diffsFound >= 9) return;
-      const rect = wrap.getBoundingClientRect();
-      const clickX = (e.clientX - rect.left) / rect.width;
-      const clickY = (e.clientY - rect.top) / rect.height;
+      
+      // 1. MEDIMOS LA IMAGEN PURA, NO EL CONTENEDOR
+      const imgRect = img.getBoundingClientRect();
+      
+      // 2. EVITAMOS CLICS FUERA DE LA IMAGEN
+      if(e.clientX < imgRect.left || e.clientX > imgRect.right || 
+         e.clientY < imgRect.top || e.clientY > imgRect.bottom) {
+         return; 
+      }
+
+      // 3. OBTENEMOS LA COORDENADA INTERNA DE LA IMAGEN (De 0.00 a 1.00)
+      const clickX = (e.clientX - imgRect.left) / imgRect.width;
+      const clickY = (e.clientY - imgRect.top) / imgRect.height;
+
+      // 👇 Herramienta para calibrar (Borra esto o ponle // cuando termines) 👇
+      alert("{x: " + clickX.toFixed(3) + ", y: " + clickY.toFixed(3) + ", found: false},");
 
       let hitIndex = -1;
       for(let i=0; i<correctZones.length; i++){
          const z = correctZones[i];
          if(!z.found) {
             const dist = Math.hypot(z.x - clickX, z.y - clickY);
-            if(dist < 0.15) { // 15% de margen de error (más fácil para celulares)
+            if(dist < 0.15) { // 15% de margen de error
                hitIndex = i;
                break;
             }
@@ -596,9 +609,10 @@ function renderDifferences(container) {
 
          const circle = document.createElement('div');
          circle.style.position = 'absolute';
+         // Usamos el clickX/Y para que el círculo aparezca justo bajo tu dedo
          circle.style.left = (clickX * 100) + '%';
          circle.style.top = (clickY * 100) + '%';
-         circle.style.width = '45px'; // Círculo un poco más grande
+         circle.style.width = '45px';
          circle.style.height = '45px';
          circle.style.border = '4px solid var(--accent2)';
          circle.style.borderRadius = '50%';
