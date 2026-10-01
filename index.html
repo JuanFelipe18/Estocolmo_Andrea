@@ -382,7 +382,8 @@ function showScreen(id){
   window.scrollTo(0,0);
 }
 function goIntro(){ 
-  document.getElementById('code-media').innerHTML = ''; // Esto "apaga" el video
+  document.getElementById('code-media').innerHTML = ''; // Apaga el video
+  document.getElementById('bgMusic').play(); // 🔊 SE ASEGURA DE QUE LA MÚSICA VUELVA A SONAR
   updateIntro(); 
   showScreen('screen-intro'); 
 }
@@ -578,7 +579,7 @@ function renderDifferences(container) {
    wrap.style.width = '100%';
 
    const img = document.createElement('img');
-   img.src = 'WhatsApp Image 2026-10-01 at 2.25.00 PM.jpeg'; 
+   img.src = 'diferencias.jpeg'; 
    img.style.width = '100%';
    img.style.borderRadius = '14px';
    img.style.display = 'block';
@@ -693,11 +694,14 @@ function showCodeScreen(){
   document.getElementById('code-big').textContent = ch.code;
   document.getElementById('code-explain').textContent = ch.explain;
   const media = document.getElementById('code-media');
+  
   if(ch.codeVideo){
     media.innerHTML = `<video controls autoplay loop playsinline style="width:100%;border-radius:14px;" src="${ch.codeVideo}"></video>`;
+    document.getElementById('bgMusic').pause(); // 🔇 PAUSA LA MÚSICA DE FONDO PARA EL RICKROLL
   } else {
     media.innerHTML = '';
   }
+  
   launchConfetti(15);
   showScreen('screen-code');
 }
@@ -706,23 +710,27 @@ function showHellTransition() {
     document.body.classList.add('hell-bg');
     showScreen('screen-hell');
     
+    document.getElementById('bgMusic').pause(); // 🔇 PAUSA LA MÚSICA DE FONDO
+
     const hellSound = new Audio('infierno.mp3'); 
     hellSound.play().catch(e => console.log("El navegador bloqueó el autoplay", e));
 
     setTimeout(() => {
         document.body.classList.remove('hell-bg');
-        startGame(); // Redirige directamente al flujo (Reloj o prueba)
+        document.getElementById('bgMusic').play(); // 🔊 REANUDA LA MÚSICA DE FONDO AL SALIR
+        startGame(); 
     }, 5500); 
 }
 
 // ====== CORRECCIÓN: REDIRIGIR AL RELOJ DESPUÉS DE LA PRUEBA ======
 function afterCode(){ 
-  document.getElementById('code-media').innerHTML = ''; // Apaga el video (Rickroll)
+  document.getElementById('code-media').innerHTML = ''; // Apaga el video
   
   if(currentIndex === 1) { 
-      showHellTransition();
+      showHellTransition(); // El infierno maneja su propia pausa/reproducción
   } else {
-      startGame(); // <-- Esto los envía directo al reloj en lugar de la Intro
+      document.getElementById('bgMusic').play(); // 🔊 REANUDA LA MÚSICA SI NO VAMOS AL INFIERNO
+      startGame(); 
   }
 }
 
