@@ -124,7 +124,7 @@
 
   <!-- PANTALLA 2: BLOQUEADO -->
   <div class="screen" id="screen-early">
-    <button class="btn-back" onclick="goIntro()">← Volver</button>
+    <button class="btn-back" onclick="goIntro()">← Pantalla Principal</button>
     <div style="font-size:70px;text-align:center;">⏳</div>
     <h1 style="font-size:1.9rem;">Aún no es la hora</h1>
     <div class="card" style="text-align:center;">
@@ -139,8 +139,11 @@
       <div class="countdown-label">⏳ Faltan</div>
       <div class="countdown-time" id="countdown-time">--:--:--</div>
       <div class="countdown-days" id="countdown-days"></div>
+      
+      <!-- NUEVO BOTÓN (Oculto por defecto) -->
+      <button class="btn btn-primary" id="btn-next-stage" style="display:none; margin-top:20px;" onclick="startGame()">¡Iniciar siguiente prueba! 🟢</button>
     </div>
-    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🐀 Modo trampa</button>
+    <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
   <!-- PANTALLA 3: PRUEBA -->
@@ -297,21 +300,21 @@ const CHALLENGES = [
     correct:3,
     explain:"\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... seguros?"
+    bad:"❌ Incorrecto... hasta Calum sabría la respuesta 😾?"
   },
   {
     day:"DÍA 3", emoji:"🧩", gif:null, codeVideo:null, code:"05", type:"sudoku",
     q:"SUDOKU EXPRÉS 🧩\nCompleta la cuadrícula interactiva. Cada fila, columna y bloque de 2x2 debe contener los números del 1 al 4 sin repetirse.",
     opts:[], correct: -1,
     explain:"✅ RESPUESTA:\n1 2 3 4\n3 4 2 1\n2 1 4 3\n4 3 1 2",
-    good:"¡Prueba superada! 🎉", bad:"Enserio está dificil un 4x4? 😐"
+    good:"¡Prueba superada! 🎉", bad:""
   },
   {
     day:"DÍA 4", emoji:"🔍", gif:null, codeVideo:null, code:"01", type:"diff",
     q:"ENCONTRAR LAS DIFERENCIAS 🔍\nToca en la imagen inferior para marcar dónde están las 9 diferencias. ¡Tienes que encontrarlas todas!",
     opts:[], correct: -1,
     explain:"\nEncontraste las 9 diferencias: el moño, la cola, el pasto, el sombrero, el pantalón, la caña, el balde, la planta y el flotador.",
-    good:"¡Prueba superada! 🎉", bad:"Honestamente, también me costó, Luisa solo vió 3 🫡"
+    good:"¡Prueba superada! 🎉", bad:""
   },
   {
     day:"DÍA 5", emoji:"🕵️", gif:"reto5.gif", codeVideo:null, code:"04", type:"mcq",
@@ -325,7 +328,7 @@ const CHALLENGES = [
     correct:2,
     explain:"\nEra domingo por la mañana, los niños no tienen escuela ni exámenes un domingo temprano. Inventó una coartada apresurada.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... Piensen lógicamente en qué día de la semana ocurrió todo 🕵️"
+    bad:"❌ Incorrecto... Que de algo sirvan todas las horas de series 🕵️"
   },
   {
     day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02", type:"mcq",
@@ -334,7 +337,7 @@ const CHALLENGES = [
     correct:2,
     explain:"\nPara el químico es la disolución de un soluto en un solvente. Para la abogada es la disolución de un matrimonio (divorcio) o de una empresa.",
     good:"¡Prueba superada! 🎉",
-    bad:"❌ Incorrecto... Busquen una palabra que encaje exacto en ambos mundos 🧠"
+    bad:"❌ Incorrecto... No soy químico ni abogado, pero si vi Breaking Bad y me la sé 😒"
   },
   {
     day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null, type:"mcq",
@@ -421,10 +424,24 @@ function startClocks(targetIndex){
   const target = stageUnlockTime(targetIndex);
   const fmt = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   const fmtDay = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',weekday:'long',day:'numeric',month:'long'});
+  
+  // Ocultar el botón al iniciar el reloj
+  document.getElementById('btn-next-stage').style.display = 'none';
+
   function tick(){
     document.getElementById('clock-time').textContent = fmt.format(new Date());
     const diff = target - Date.now();
-    if(diff <= 0){ clearInterval(clockInterval); clockInterval = null; startGame(); return; }
+    
+    if(diff <= 0){ 
+      // CUANDO LA HORA SE CUMPLE
+      clearInterval(clockInterval); 
+      clockInterval = null; 
+      document.getElementById('countdown-time').textContent = "00:00:00";
+      // Mostrar el botón para que avancen manualmente
+      document.getElementById('btn-next-stage').style.display = 'block'; 
+      return; 
+    }
+    
     const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000),
           m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
     document.getElementById('countdown-time').textContent =
@@ -525,24 +542,24 @@ function checkSudoku() {
       p.codes[currentIndex] = CHALLENGES[currentIndex].code;
       saveProgress(p);
    } else {
-      fb.textContent = '❌ Hay errores, revisa los números...'; fb.className = 'feedback bad';
+      fb.textContent = '❌ Enserio está dificil un 4x4? 😐'; fb.className = 'feedback bad';
    }
 }
 
 let diffsFound = 0;
 let correctZones = [];
 function renderDifferences(container) {
-   // Coordenadas calibradas EXACTAMENTE con tu imagen de solución (para la imagen de ABAJO)
+   // Coordenadas exactas calibradas
    correctZones = [
-      {x: 0.25, y: 0.57, found: false}, // 1. Moño del gato
-      {x: 0.10, y: 0.74, found: false}, // 2. Cola del gato
-      {x: 0.27, y: 0.93, found: false}, // 3. Pasto bajo el gato
-      {x: 0.46, y: 0.64, found: false}, // 4. Líneas del sombrero
-      {x: 0.55, y: 0.81, found: false}, // 5. Pantalón del perro
-      {x: 0.77, y: 0.59, found: false}, // 6. Punta de la caña
-      {x: 0.70, y: 0.80, found: false}, // 7. Balde
-      {x: 0.92, y: 0.72, found: false}, // 8. Hoja de la planta derecha
-      {x: 0.91, y: 0.89, found: false}  // 9. Flotador
+      {x: 0.742, y: 0.793, found: false}, // caneca
+      {x: 0.478, y: 0.846, found: false}, // pantalón
+      {x: 0.895, y: 0.892, found: false}, // cebo
+      {x: 0.895, y: 0.731, found: false}, // planta derecha
+      {x: 0.219, y: 0.907, found: false}, // planta izquierda
+      {x: 0.058, y: 0.745, found: false}, // cola
+      {x: 0.235, y: 0.571, found: false}, // moño
+      {x: 0.755, y: 0.540, found: false}, // arbusto
+      {x: 0.401, y: 0.653, found: false}  // sombrero
    ];
    let diffsFound = 0;
    
@@ -552,7 +569,7 @@ function renderDifferences(container) {
    wrap.style.width = '100%';
 
    const img = document.createElement('img');
-   img.src = 'diferencias.jpeg'; 
+   img.src = 'WhatsApp Image 2026-10-01 at 2.25.00 PM.jpeg'; 
    img.style.width = '100%';
    img.style.borderRadius = '14px';
    img.style.display = 'block';
@@ -575,21 +592,15 @@ function renderDifferences(container) {
    wrap.onclick = (e) => {
       if(diffsFound >= 9) return;
       
-      // 1. MEDIMOS LA IMAGEN PURA, NO EL CONTENEDOR
       const imgRect = img.getBoundingClientRect();
       
-      // 2. EVITAMOS CLICS FUERA DE LA IMAGEN
       if(e.clientX < imgRect.left || e.clientX > imgRect.right || 
          e.clientY < imgRect.top || e.clientY > imgRect.bottom) {
          return; 
       }
 
-      // 3. OBTENEMOS LA COORDENADA INTERNA DE LA IMAGEN (De 0.00 a 1.00)
       const clickX = (e.clientX - imgRect.left) / imgRect.width;
       const clickY = (e.clientY - imgRect.top) / imgRect.height;
-
-      // 👇 Herramienta para calibrar (Borra esto o ponle // cuando termines) 👇
-      alert("{x: " + clickX.toFixed(3) + ", y: " + clickY.toFixed(3) + ", found: false},");
 
       let hitIndex = -1;
       for(let i=0; i<correctZones.length; i++){
@@ -609,7 +620,6 @@ function renderDifferences(container) {
 
          const circle = document.createElement('div');
          circle.style.position = 'absolute';
-         // Usamos el clickX/Y para que el círculo aparezca justo bajo tu dedo
          circle.style.left = (clickX * 100) + '%';
          circle.style.top = (clickY * 100) + '%';
          circle.style.width = '45px';
@@ -687,13 +697,12 @@ function showHellTransition() {
     document.body.classList.add('hell-bg');
     showScreen('screen-hell');
     
-    // 🎵 Reproducir el sonido diabólico
-    const hellSound = new Audio('infierno.mp3'); // Asegúrate de que el nombre coincida con tu archivo
+    const hellSound = new Audio('infierno.mp3'); 
     hellSound.play().catch(e => console.log("El navegador bloqueó el autoplay", e));
 
     setTimeout(() => {
         document.body.classList.remove('hell-bg');
-        goIntro();
+        startGame(); // Redirige directamente al flujo (Reloj o prueba)
     }, 5500); 
 }
 
@@ -828,6 +837,17 @@ st.textContent = '@keyframes fall{to{transform:translateY(110vh) rotate(360deg);
 document.head.appendChild(st);
 
 updateIntro();
+// ====== AUDIO DE FONDO AL ENTRAR ======
+const bgAudio = new Audio('cancion.mp3'); // Cambia por el nombre de tu archivo
+bgAudio.loop = true; // Hace que se repita en bucle infinito
+bgAudio.volume = 0.5; // Volumen al 50% para que no sature
+
+// Reproducir al primer toque de la pantalla
+document.body.addEventListener('click', () => {
+    if (bgAudio.paused) {
+        bgAudio.play().catch(e => console.log("Audio bloqueado", e));
+    }
+}, { once: true });
 </script>
 </body>
 </html>
