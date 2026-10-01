@@ -105,8 +105,16 @@
 <div class="stars"></div>
 <div class="wrapper">
 
+  <!-- PANTALLA 0: PRE-INICIO (Para activar el audio con permiso del navegador) -->
+  <div class="screen active" id="screen-pre" style="justify-content:center; text-align:center; min-height:80vh;">
+    <div style="font-size:80px; margin-bottom: 20px; animation: pop 0.5s ease;">🎧</div>
+    <h1 style="font-size:2.2rem; margin-bottom: 10px;">¡Atención!</h1>
+    <p style="color:var(--muted); font-size:1.1rem; margin-bottom: 30px; font-weight: 600; line-height: 1.5;">Para disfrutar de esta experiencia, asegúrense de tener el volumen encendido.</p>
+    <button class="btn btn-primary" onclick="enterGame()">¿Están listos? 🎵</button>
+  </div>
+
   <!-- PANTALLA 1: INTRO -->
-  <div class="screen active" id="screen-intro">
+  <div class="screen" id="screen-intro">
     <div style="height:20px"></div>
     <div class="intro-icon">🔐</div>
     <h1>Operación Archivo X</h1>
@@ -706,12 +714,14 @@ function showHellTransition() {
     }, 5500); 
 }
 
+// ====== CORRECCIÓN: REDIRIGIR AL RELOJ DESPUÉS DE LA PRUEBA ======
 function afterCode(){ 
-  document.getElementById('code-media').innerHTML = ''; // Esto "apaga" el video
+  document.getElementById('code-media').innerHTML = ''; // Apaga el video (Rickroll)
+  
   if(currentIndex === 1) { 
       showHellTransition();
   } else {
-      goIntro(); 
+      startGame(); // <-- Esto los envía directo al reloj en lugar de la Intro
   }
 }
 
@@ -838,16 +848,16 @@ document.head.appendChild(st);
 
 updateIntro();
 // ====== AUDIO DE FONDO AL ENTRAR ======
-const bgAudio = new Audio('cancion.mp3'); // Cambia por el nombre de tu archivo
-bgAudio.loop = true; // Hace que se repita en bucle infinito
-bgAudio.volume = 0.5; // Volumen al 50% para que no sature
+const bgAudio = new Audio('cancion.mp3'); // Asegúrate de que coincida con tu archivo
+bgAudio.loop = true; 
+bgAudio.volume = 0.5;
 
-// Reproducir al primer toque de la pantalla
-document.body.addEventListener('click', () => {
-    if (bgAudio.paused) {
-        bgAudio.play().catch(e => console.log("Audio bloqueado", e));
-    }
-}, { once: true });
+// Esta función se ejecuta al tocar "¿Están listos?"
+function enterGame() {
+    bgAudio.play().catch(e => console.log("Audio bloqueado", e));
+    updateIntro();
+    showScreen('screen-intro');
+}
 </script>
 </body>
 </html>
