@@ -291,7 +291,7 @@ const CHALLENGES = [
     q:"RETO 3 — PREGUNTA TRAMPA 😂\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
     opts:["A. Izquierda","B. Derecha","C. Hacia abajo","D. Ninguno de los anteriores"],
     correct:3,
-    explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣\nLa trampa estaba en la primera frase.",
+    explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣",
     good:"¡Prueba superada! 🎉",
     bad:"❌ Incorrecto... lean la primera frase OTRA vez 👀"
   },
@@ -485,7 +485,7 @@ function showCodeScreen(){
   document.getElementById('code-explain').textContent = ch.explain;
   const media = document.getElementById('code-media');
   if(ch.codeVideo){
-    media.innerHTML = `<video controls autoplay playsinline style="width:100%;border-radius:14px;" src="${ch.codeVideo}"></video>`;
+    media.innerHTML = `<video controls autoplay loop playsinline style="width:100%;border-radius:14px;" src="${ch.codeVideo}"></video>`;
   } else {
     media.innerHTML = '';
   }
