@@ -90,13 +90,14 @@
       20%, 60% {transform: translateX(-5px) rotate(-3deg);}
       40%, 80% {transform: translateX(5px) rotate(3deg);}
   }
-  .sudoku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; width: 220px; margin: 0 auto; border: 4px solid var(--accent); background: var(--accent); }
-  .sudoku-cell { width: 100%; aspect-ratio: 1; text-align: center; font-size: 1.8rem; font-family: 'Fredoka One', cursive; background: var(--card); color: var(--text); border: 1px solid rgba(255,255,255,0.2); outline: none; border-radius: 0; }
-  .sudoku-cell:nth-child(2n) { border-right: 4px solid var(--accent); }
+  /* ESTILOS DEL SUDOKU OPTIMIZADOS */
+  .sudoku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; width: 100%; max-width: 260px; margin: 0 auto; border: 3px solid #000; background: #000; }
+  .sudoku-cell { width: 100%; aspect-ratio: 1; text-align: center; font-size: 2rem; font-family: 'Fredoka One', cursive; background: #ffffff; color: #000000; border: 1px solid #ccc; outline: none; border-radius: 0; padding: 0; -webkit-appearance: none; }
+  .sudoku-cell:nth-child(2n) { border-right: 3px solid #000; }
   .sudoku-cell:nth-child(4n) { border-right: none; }
-  .sudoku-cell:nth-child(n+5):nth-child(-n+8) { border-bottom: 4px solid var(--accent); }
-  .sudoku-cell.given { color: var(--accent); background: rgba(255,255,255,0.05); }
-  .sudoku-cell:focus { background: rgba(247,201,72,0.2); }
+  .sudoku-cell:nth-child(n+5):nth-child(-n+8) { border-bottom: 3px solid #000; }
+  .sudoku-cell.given { background: #e2e8f0; color: #1e293b; pointer-events: none; }
+  .sudoku-cell:focus { background: #fef08a; border-color: var(--accent); z-index: 10; position: relative; }
 </style>
 <base target="_blank">
 </head>
@@ -368,7 +369,11 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-function goIntro(){ updateIntro(); showScreen('screen-intro'); }
+function goIntro(){ 
+  document.getElementById('code-media').innerHTML = ''; // Esto "apaga" el video
+  updateIntro(); 
+  showScreen('screen-intro'); 
+}
 
 function updateIntro(){
   const p = loadProgress();
@@ -474,14 +479,22 @@ function renderSudoku(container) {
    const wrap = document.createElement('div');
    wrap.className = 'sudoku-grid';
    const initial = [0,0,0,4, 0,0,0,0, 2,0,0,3, 4,0,1,2];
+   
    initial.forEach((val) => {
       const inp = document.createElement('input');
       inp.className = 'sudoku-cell' + (val !== 0 ? ' given' : '');
-      inp.type = 'tel';
-      inp.maxLength = 1;
+      inp.type = 'number';
+      inp.inputMode = 'numeric'; // Abre el teclado numérico en celulares
+      
       if(val !== 0) {
          inp.value = val;
          inp.readOnly = true;
+      } else {
+         // Asegurar que solo escriban un número y que sea del 1 al 4
+         inp.oninput = function() {
+            this.value = this.value.replace(/[^1-4]/g, '');
+            if (this.value.length > 1) this.value = this.value.slice(-1);
+         };
       }
       wrap.appendChild(inp);
    });
@@ -664,6 +677,11 @@ function showCodeScreen(){
 function showHellTransition() {
     document.body.classList.add('hell-bg');
     showScreen('screen-hell');
+    
+    // 🎵 Reproducir el sonido diabólico
+    const hellSound = new Audio('infierno.mp3'); // Asegúrate de que el nombre coincida con tu archivo
+    hellSound.play().catch(e => console.log("El navegador bloqueó el autoplay", e));
+
     setTimeout(() => {
         document.body.classList.remove('hell-bg');
         goIntro();
@@ -671,7 +689,7 @@ function showHellTransition() {
 }
 
 function afterCode(){ 
-  // Mostrar pantalla del infierno después del Día 2 (index 1)
+  document.getElementById('code-media').innerHTML = ''; // Esto "apaga" el video
   if(currentIndex === 1) { 
       showHellTransition();
   } else {
