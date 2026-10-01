@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Tu Reto Semanal 🎵</title>
+<title>Operación Archivo X 🔐</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#0f0c1a;--card:#1a1530;--accent:#f7c948;--accent2:#ff6b6b;--accent3:#6bcbff;--green:#4ade80;--text:#f0eaff;--muted:#9d8fc0;--radius:20px;}
@@ -15,28 +15,24 @@
   .screen{display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;gap:20px;}
   .screen.active{display:flex;animation:fadeUp 0.5s ease;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-  .intro-icon{font-size:80px;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(247,201,72,0.5));}
-  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  h1{font-family:'Fredoka One',cursive;font-size:2.2rem;text-align:center;line-height:1.1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .intro-icon{font-size:80px;filter:drop-shadow(0 0 20px rgba(247,201,72,0.5));}
+  h1{font-family:'Fredoka One',cursive;font-size:2.1rem;text-align:center;line-height:1.1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
   .subtitle{text-align:center;color:var(--muted);font-size:1rem;font-weight:600;line-height:1.5;}
   .card{background:var(--card);border-radius:var(--radius);padding:22px 20px;width:100%;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.3);}
   .progress-wrap{width:100%;display:flex;flex-direction:column;gap:8px;}
   .progress-label{display:flex;justify-content:space-between;font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
   .progress-bar{height:8px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;}
   .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
-  /* ═══ LETRAS OBTENIDAS (pantalla de pruebas) ═══ */
-  .letters-row{display:flex;gap:10px;justify-content:center;width:100%;}
-  .letter-slot{width:44px;height:52px;border-radius:12px;background:rgba(255,255,255,0.05);border:2px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--accent);}
-  .letter-slot.got{background:rgba(247,201,72,0.12);border:2px solid var(--accent);box-shadow:0 0 14px rgba(247,201,72,0.3);}
   .challenge-num{font-family:'Fredoka One',cursive;font-size:0.85rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
-  .challenge-text{font-size:1.05rem;font-weight:700;line-height:1.5;color:var(--text);}
+  .challenge-text{font-size:1.05rem;font-weight:700;line-height:1.5;color:var(--text);white-space:pre-line;}
   .btn{width:100%;padding:16px;border:none;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;transition:transform 0.15s ease;letter-spacing:0.5px;}
   .btn:active{transform:scale(0.97);}
   .btn-primary{background:linear-gradient(135deg,var(--accent),#f0a030);color:#1a1000;box-shadow:0 4px 20px rgba(247,201,72,0.35);}
   .btn-secondary{background:linear-gradient(135deg,var(--green),#22c55e);color:#001a08;box-shadow:0 4px 20px rgba(74,222,128,0.35);}
   .btn-ghost{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid rgba(255,255,255,0.1);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;}
+  .btn-back{align-self:flex-start;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid rgba(255,255,255,0.12);border-radius:99px;padding:8px 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;}
+  .btn-back:active{transform:scale(0.95);}
   .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:10;}
-  /* ═══ RELOJ / CUENTA REGRESIVA ═══ */
   .clock-box{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;border:1px solid rgba(255,255,255,0.07);text-align:center;}
   .clock-label{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
   .clock-time{font-family:'Fredoka One',cursive;font-size:2.6rem;color:var(--accent3);line-height:1;}
@@ -44,40 +40,48 @@
   .countdown-box{background:rgba(247,201,72,0.08);border:1px solid rgba(247,201,72,0.25);border-radius:16px;padding:16px 20px;text-align:center;width:100%;}
   .countdown-label{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
   .countdown-time{font-family:'Fredoka One',cursive;font-size:2.4rem;color:var(--accent);line-height:1;}
-  .countdown-days{font-size:1rem;color:var(--muted);font-weight:700;margin-top:8px;}
-  /* ═══ OPCIONES DE RESPUESTA ═══ */
+  .countdown-days{font-size:0.95rem;color:var(--muted);font-weight:700;margin-top:8px;line-height:1.5;}
   .opts{display:flex;flex-direction:column;gap:10px;width:100%;}
   .opt{width:100%;padding:14px 18px;border-radius:14px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text);cursor:pointer;text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.15s;}
   .opt:active{transform:scale(0.98);}
   .opt.correct{border-color:var(--green);background:rgba(74,222,128,0.15);color:var(--green);}
   .opt.wrong{border-color:var(--accent2);background:rgba(255,107,107,0.12);color:var(--accent2);}
-  .opt.reveal{border-color:var(--green);background:rgba(74,222,128,0.1);}
-  .opt:disabled{cursor:default;}
+  .opt.wrong:disabled{opacity:0.55;}
   .feedback{text-align:center;font-size:0.9rem;font-weight:700;line-height:1.5;min-height:40px;}
   .feedback.good{color:var(--green);}
   .feedback.bad{color:var(--accent2);}
-  /* ═══ PANTALLA DE LETRA GANADA ═══ */
-  .letter-emoji{font-size:60px;text-align:center;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+  .code-emoji{font-size:64px;text-align:center;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1);}
   @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-  .letter-big{font-family:'Fredoka One',cursive;font-size:5rem;line-height:1;color:var(--accent);text-align:center;text-shadow:0 0 30px rgba(247,201,72,0.5);animation:pop 0.6s cubic-bezier(0.34,1.56,0.64,1);}
-  .letter-msg{font-size:1.05rem;line-height:1.6;text-align:center;font-weight:700;}
-  .letter-msg strong{color:var(--green);}
-  /* ═══ PANTALLA FINAL (CONTRASEÑA) ═══ */
+  .code-big{font-family:'Fredoka One',cursive;font-size:5.5rem;line-height:1;color:var(--accent);text-align:center;text-shadow:0 0 30px rgba(247,201,72,0.5);animation:pop 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+  .code-label{font-size:0.8rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;}
+  .explain-text{font-size:0.95rem;line-height:1.65;color:var(--text);font-weight:600;white-space:pre-line;}
+  .explain-text strong{color:var(--green);}
   .password-input{width:100%;padding:16px;border-radius:14px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text);font-family:'Fredoka One',cursive;font-size:1.6rem;letter-spacing:8px;text-align:center;text-transform:uppercase;outline:none;}
   .password-input:focus{border-color:var(--accent);}
   .password-error{text-align:center;color:var(--accent2);font-size:0.85rem;font-weight:700;min-height:20px;}
-  /* ═══ PANTALLA SORPRESA ═══ */
-  .surprise-img{width:100%;max-width:380px;border-radius:var(--radius);border:2px solid rgba(247,201,72,0.35);box-shadow:0 0 30px rgba(247,201,72,0.2);animation:pop 0.6s cubic-bezier(0.34,1.56,0.64,1);}
   .surprise-msg{font-size:1.05rem;line-height:1.7;text-align:center;font-weight:600;white-space:pre-line;}
   .final-emoji{font-size:72px;text-align:center;animation:spinIn 0.8s cubic-bezier(0.34,1.56,0.64,1);}
   @keyframes spinIn{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0deg)}}
-  /* ═══ MODAL MODO PRUEBA (solo tú) ═══ */
+  .surprise-img{width:100%;max-width:380px;border-radius:var(--radius);border:2px solid rgba(247,201,72,0.35);box-shadow:0 0 30px rgba(247,201,72,0.2);}
+  .sweden-title{font-family:'Fredoka One',cursive;font-size:1.6rem;text-align:center;line-height:1.4;color:var(--green);text-shadow:0 0 20px rgba(74,222,128,0.3);}
   .modal-back{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;}
   .modal-box{background:var(--card);border-radius:var(--radius);padding:24px;width:100%;max-width:360px;border:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:16px;}
   .modal-title{font-family:'Fredoka One',cursive;font-size:1.3rem;text-align:center;color:var(--accent);}
-  .modal-input{width:100%;padding:14px 16px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:var(--text);font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;outline:none;text-align:center;}
+  .modal-input{width:100%;padding:14px 16px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:var(--text);font-family:'Nunito',sans-serif;font-size:1.2rem;font-weight:800;outline:none;text-align:center;}
+  .math-problem{font-family:'Fredoka One',cursive;font-size:1.6rem;text-align:center;color:var(--accent3);letter-spacing:1px;}
   .text-center{text-align:center;}
   .text-sm{font-size:0.85rem;color:var(--muted);}
+  .warn-text{font-size:0.85rem;color:var(--accent2);font-weight:700;text-align:center;line-height:1.5;}
+  .word-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
+  .word-cell{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;text-align:center;}
+  .word-num{font-size:0.7rem;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+  .word-name{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--text);letter-spacing:3px;margin-top:4px;}
+  .word-code{font-size:0.9rem;font-weight:800;color:var(--accent);margin-top:4px;}
+  .trip-banner{background:linear-gradient(135deg,rgba(107,203,255,0.12),rgba(74,222,128,0.12));border:1px solid rgba(107,203,255,0.3);border-radius:var(--radius);padding:20px;width:100%;text-align:center;}
+  .trip-route{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--accent3);}
+  .trip-dates{font-size:1rem;font-weight:800;color:var(--green);margin-top:8px;}
+  .trip-days{font-size:0.9rem;color:var(--muted);font-weight:700;margin-top:4px;}
+  .challenge-gif{width:100%;max-width:340px;border-radius:14px;display:block;margin:0 auto;}
 </style>
 <base target="_blank">
 </head>
@@ -85,38 +89,30 @@
 <div class="stars"></div>
 <div class="wrapper">
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 1: PRESENTACIÓN (INTRO)
-       Ya NO menciona GPS ni lugares. Solo el reto.
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PANTALLA 1: INTRO -->
   <div class="screen active" id="screen-intro">
     <div style="height:20px"></div>
-    <div class="intro-icon">🎵</div>
-    <h1>Tu Reto Semanal</h1>
-    <!-- ✏️ EDITABLE: texto de presentación -->
-    <p class="subtitle">Tus hermanitoos 🎶🎵 te quieren distraer<br>por una semana...<br><br>¿Te mides al reto? 😏✨</p>
+    <div class="intro-icon">🔐</div>
+    <h1>Operación Archivo X</h1>
+    <p class="subtitle">Cayis + Toro<br># UNA MISIÓN EN 7 DÍAS</p>
     <div class="card" style="text-align:center;">
-      <!-- ✏️ EDITABLE: explicación breve del juego -->
-      <p style="font-size:0.95rem;line-height:1.6;color:var(--muted);font-weight:600;">Cada día tendrás una <strong style="color:var(--text)">prueba</strong> que resolver 📋<br><br>Cada acierto te da <strong style="color:var(--accent)">una letra secreta</strong> 🔤<br><br>Al final de la semana, junta todas las letras y descubre <strong style="color:var(--accent2)">la sorpresa</strong> 🎁</p>
+      <p style="font-size:0.95rem;line-height:1.7;color:var(--muted);font-weight:600;">Durante los próximos 7 días deberán superar una serie de pruebas. Cada prueba superada les entregará un <strong style="color:var(--accent)">código</strong>.<br><br>🔢 <strong style="color:var(--text)">Guarden todos los códigos.</strong><br><br>No intenten encontrarles sentido todavía. No saben para qué sirven. No saben por qué son diferentes.<br><br><strong style="color:var(--accent2)">Solo superen las pruebas, guarden los códigos y esperen.</strong><br><br>Al final de la misión descubrirán para qué los necesitaban...</p>
     </div>
-    <button class="btn btn-primary" onclick="startGame()">¡Vamos a jugar! 🚀</button>
-    <p class="text-sm text-center">Toca el botón para empezar (o ver cuánto falta ⏳)</p>
-    <!-- ⚙️ MODO PRUEBA: para ti (apenas visible pero fácil de encontrar) -->
+    <div class="card" style="text-align:center;padding:16px 20px;">
+      <p style="font-size:0.9rem;line-height:1.6;font-weight:700;">Cada día, a las <strong style="color:var(--accent)">19:00 en punto</strong> ⏰ (hora de Estocolmo 🇸🇪), se desbloquea una <strong style="color:var(--text)">nueva prueba</strong> 📋<br><span style="color:var(--muted)">(Si olvidan un código... habrá castigo 😈)</span></p>
+    </div>
+    <button class="btn btn-primary" id="btn-start" onclick="startGame()">¿Aceptan el reto? 🟢</button>
+    <p class="text-sm text-center" id="intro-progress"></p>
     <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 2: TODAVÍA NO ES LA HORA
-       Muestra reloj con hora actual de Estocolmo + cuenta regresiva.
-       Se abre automáticamente cuando llegue la fecha.
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PANTALLA 2: BLOQUEADO -->
   <div class="screen" id="screen-early">
-    <div style="height:10px"></div>
-    <div style="font-size:80px;text-align:center;">⏳</div>
-    <h1 style="font-size:1.9rem;">¡Todavía no es la hora!</h1>
+    <button class="btn-back" onclick="goIntro()">← Volver</button>
+    <div style="font-size:70px;text-align:center;">⏳</div>
+    <h1 style="font-size:1.9rem;">Aún no es la hora</h1>
     <div class="card" style="text-align:center;">
-      <!-- ✏️ EDITABLE: mensaje mientras espera -->
-      <p style="font-size:1.05rem;line-height:1.7;font-weight:700;">Calma, impaciente 😄<br>El reto <strong style="color:var(--accent)">empieza el lunes 5 de octubre</strong><br>a las <strong style="color:var(--accent)">7:00 pm</strong> (hora de Estocolmo) 🇸🇪</p>
+      <p style="font-size:1.05rem;line-height:1.7;font-weight:700;" id="early-text">La siguiente prueba se desbloquea a las <strong style="color:var(--accent)">19:00</strong> (hora de Estocolmo) 🇸🇪<br><br>Mientras tanto, a cuidar esos códigos 🧠🔢</p>
     </div>
     <div class="clock-box">
       <div class="clock-label">🕐 Hora actual en Estocolmo</div>
@@ -128,107 +124,123 @@
       <div class="countdown-time" id="countdown-time">--:--:--</div>
       <div class="countdown-days" id="countdown-days"></div>
     </div>
-    <div class="card" style="text-align:center;padding:16px 20px;">
-      <!-- ✏️ EDITABLE: mensaje de mientras tanto -->
-      <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;font-weight:600;">Mientras tanto... descansa, toma un fika ☕🥐<br>y prepárate, que esto estará bueno 😏✨</p>
-    </div>
-    <!-- ⚙️ MODO PRUEBA: para ti -->
     <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75;max-width:280px" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
-    <div style="display:none">
-    </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 3: PRUEBA DEL DÍA (pregunta + opciones)
-       Las preguntas se configuran en el arreglo CHALLENGES más abajo.
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PANTALLA 3: PRUEBA -->
   <div class="screen" id="screen-challenge">
+    <button class="btn-back" onclick="goIntro()">← Volver</button>
     <div class="progress-wrap">
-      <div class="progress-label"><span>Progreso del reto</span><span id="progress-text">Prueba 1 / 5</span></div>
+      <div class="progress-label"><span>Progreso de la misión</span><span id="progress-text">Día 1 / 7</span></div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <!-- Letras conseguidas hasta ahora -->
-    <div class="letters-row" id="letters-row"></div>
+    <div class="card" style="padding:14px;text-align:center;"><div id="challenge-emoji" style="font-size:56px;">🎣</div></div>
     <div class="card">
-      <div class="challenge-num" id="challenge-num">Prueba 1 de 5</div>
+      <div class="challenge-num" id="challenge-num">Día 1</div>
       <div class="challenge-text" id="challenge-text"></div>
     </div>
     <div class="opts" id="opts"></div>
     <div class="feedback" id="feedback"></div>
     <button class="btn btn-primary" id="btn-next" style="display:none" onclick="nextAfterAnswer()">Siguiente ➡️</button>
-    <!-- ⚙️ MODO PRUEBA: botón oculto para ti (revisar sin restricciones) -->
     <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 4: LETRA GANADA
-       Se muestra después de cada acierto. NO EDITAR (texto fijo pedido).
-       ═══════════════════════════════════════════════════════════════ -->
-  <div class="screen" id="screen-letter">
-    <div class="letter-emoji">🔓</div>
-    <h1 style="font-size:1.8rem;">¡Respuesta correcta!</h1>
+  <!-- PANTALLA 4: CÓDIGO GANADO -->
+  <div class="screen" id="screen-code">
+    <div class="code-emoji">✅</div>
+    <h1 style="font-size:1.8rem;">¡Prueba superada!</h1>
     <div class="card" style="display:flex;flex-direction:column;gap:14px;align-items:center;">
-      <div class="letter-big" id="letter-big">?</div>
-      <div class="letter-msg">Guarda esta letra, te servirá al final, <strong>no la olvides</strong> 🧠✨</div>
+      <div class="code-label" id="code-label">Han obtenido un código</div>
+      <div class="code-big" id="code-big">03</div>
+      <div id="code-media" style="width:100%;"></div>
+      <div class="explain-text" id="code-explain" style="width:100%;border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;"></div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--muted);text-align:center;">🔢 <strong style="color:var(--accent)">Guárdenlo.</strong> No intenten descifrarlo todavía.</div>
     </div>
-    <button class="btn btn-secondary" id="btn-letter-next" onclick="afterLetter()">Continuar ➡️</button>
+    <button class="btn btn-secondary" onclick="afterCode()">Lo guardé, continuar ➡️</button>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 5: CONTRASEÑA FINAL
-       La hermana ingresa las letras reunidas para desbloquear la sorpresa.
-       ═══════════════════════════════════════════════════════════════ -->
-  <div class="screen" id="screen-password">
-    <div style="height:10px"></div>
-    <div style="font-size:64px;text-align:center;">🔑</div>
-    <h1 style="font-size:1.9rem;">Último paso...</h1>
-    <div class="card" style="text-align:center;">
-      <p style="font-size:1rem;line-height:1.6;font-weight:700;">Juntaste todas las letras 🔤<br>Ahora escribe la palabra que forman<br>para descubrir tu <strong style="color:var(--accent2)">sorpresa</strong> 🎁</p>
+  <!-- PANTALLA 5: ARCHIVO FINAL -->
+  <div class="screen" id="screen-archive">
+    <button class="btn-back" onclick="goIntro()">← Volver</button>
+    <div style="font-size:60px;text-align:center;">📁</div>
+    <h1 style="font-size:1.9rem;">El Archivo Final</h1>
+    <div class="card">
+      <p style="font-size:0.95rem;line-height:1.7;font-weight:600;">Seis días. Seis códigos. Hoy sí tienen utilidad. 🔓<br><br>A continuación encontrarán <strong style="color:var(--accent)">seis palabras</strong>. Cada número les indica <strong style="color:var(--accent)">qué letra deben extraer de cada palabra</strong>.<br><br>No hay ninguna palabra de más. No hay ningún número de más. <strong style="color:var(--accent2)">Todo lo que necesitan está frente a ustedes.</strong> Buena suerte. 🍀</p>
     </div>
-    <div class="letters-row" id="letters-row-final"></div>
-    <input class="password-input" id="password-input" type="text" maxlength="10" placeholder="_____"
-      onkeydown="if(event.key==='Enter')checkFinalPassword()">
-    <p class="password-error" id="password-error"></p>
-    <button class="btn btn-primary" onclick="checkFinalPassword()">Descubrir la sorpresa 🎁</button>
-    <!-- ⚙️ MODO PRUEBA: botón oculto para ti -->
+    <div class="card">
+      <div class="word-grid" id="word-grid"></div>
+    </div>
+    <button class="btn btn-ghost" id="btn-forgot" style="color:var(--accent2);border-color:rgba(255,107,107,0.3)" onclick="openForgot()">😅 Olvidé mis códigos... (castigo 😈)</button>
+    <div class="card">
+      <p style="font-size:0.95rem;font-weight:700;text-align:center;margin-bottom:12px;">🧩 ¿Qué palabra se forma?</p>
+      <input class="password-input" id="archive-input" type="text" maxlength="8" placeholder="______"
+        onkeydown="if(event.key==='Enter')checkArchive()">
+      <p class="password-error" id="archive-error"></p>
+      <button class="btn btn-primary" onclick="checkArchive()">Descifrar el archivo 🔓</button>
+    </div>
     <button class="btn btn-ghost" style="font-size:0.8rem;opacity:0.75" onclick="openAdmin()">🛠️ Modo prueba (solo hermanos)</button>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       PANTALLA 6: SORPRESA
-       ✏️ EDITABLE: cambia la URL de la imagen (src) y el mensaje.
-       Los emoticones funcionan: solo cópialos y péguelos 😊🎉
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- PANTALLA 6: REVELACIÓN FINAL -->
   <div class="screen" id="screen-surprise">
-    <div class="final-emoji">🎉</div>
-    <!-- ✏️ EDITABLE: título superior -->
-    <h1 style="font-size:2.2rem;">Sorpresa</h1>
-    <!-- ✏️ EDITABLE: reemplaza el src por la URL de tu imagen -->
-    <img class="surprise-img" src="https://placehold.co/600x400/1a1530/f7c948?text=Tu+Imagen+Aqu%C3%AD+%F0%9F%93%B8" alt="Sorpresa">
+    <div class="final-emoji">✈️</div>
+    <h1 style="font-size:2.2rem;">Archivo X descifrado</h1>
     <div class="card">
-      <!-- ✏️ EDITABLE: INSERTE MENSAJE AQUÍ (admite emoticones, copia y pega) -->
-      <p class="surprise-msg">Inserte mensaje aquí 💌
-Escribe aquí tu mensaje para tu hermana...
-Puedes usar emoticones: 🎂🥂✈️🇸🇪💛😊🎁</p>
+      <p class="surprise-msg">🎉 <strong style="color:var(--green)">MISIÓN COMPLETADA</strong> 🎉
+
+Cayis + Toro
+
+9000 km de distancia.
+730 días de espera.
+Y una aventura que apenas comienza. 💛</p>
+    </div>
+    <div class="trip-banner">
+      <div class="trip-route">🇨🇴 BOGOTÁ → ESTOCOLMO 🇸🇪</div>
+      <div class="trip-dates">📅 19 JUNIO — 08 JULIO 2027</div>
+      <div class="trip-days">18 DÍAS JUNTOS 🎒✨</div>
+    </div>
+    <div class="card" style="text-align:center;border-color:rgba(74,222,128,0.35);">
+      <div class="sweden-title">🇸🇪 NOS VEMOS EN SUECIA 🇸🇪</div>
+      <!-- 📸 AQUÍ VA TU IMAGEN: sube tu foto (ej: foto.jpg) junto a este archivo y pon su nombre en src -->
+      <img class="surprise-img" style="margin-top:16px"
+           src="foto.jpg"
+           alt="Sorpresa"
+           onerror="this.src='https://placehold.co/600x400/1a1530/4ade80?text=Sube+tu+foto+aqui+%F0%9F%93%B8'">
+      <p class="text-sm" style="margin-top:10px">📸 (hermanos: cambien src="foto.jpg" por el nombre de su imagen)</p>
     </div>
     <button class="btn btn-primary" onclick="celebrate()">¡Celebrar! 🎊</button>
   </div>
 
 </div>
 
-<!-- ⚙️ MODAL MODO PRUEBA: contraseña secreta SOLO para ti -->
+<!-- 😈 MODAL CASTIGO -->
+<div class="modal-back" id="forgot-modal" style="display:none">
+  <div class="modal-box">
+    <p class="modal-title">😈 Castigo por olvidadizos...</p>
+    <p class="warn-text">Si quieren recuperar sus códigos, resuelvan esta operación SIN calculadora. Si fallan, sale otra peor 😤</p>
+    <div class="math-problem" id="math-problem">...</div>
+    <input class="modal-input" id="math-input" type="number" inputmode="numeric" placeholder="Tu respuesta"
+      onkeydown="if(event.key==='Enter')checkMath()">
+    <p id="math-error" style="text-align:center;font-size:0.85rem;font-weight:700;min-height:20px;"></p>
+    <button class="btn btn-primary" onclick="checkMath()">Responder ✅</button>
+    <button class="btn btn-ghost" onclick="closeForgot()">Me rindo 😓</button>
+  </div>
+</div>
+
+<!-- ⚙️ MODAL MODO PRUEBA -->
 <div class="modal-back" id="admin-modal" style="display:none">
   <div class="modal-box">
     <p class="modal-title">Modo prueba 🛠️</p>
     <input class="modal-input" id="admin-input" type="password" placeholder="Contraseña de prueba"
       onkeydown="if(event.key==='Enter')checkAdmin()">
     <p id="admin-error" style="text-align:center;color:var(--accent2);font-size:0.85rem;font-weight:700;min-height:20px;"></p>
-    <!-- Estas opciones aparecen solo si la contraseña es correcta -->
     <div id="admin-actions" style="display:none;flex-direction:column;gap:10px;">
-      <button class="btn btn-secondary" onclick="adminSkipTo(0)">Ir a prueba 1 📝</button>
-      <button class="btn btn-secondary" onclick="adminSkipTo(4)">Ir a última prueba 📝</button>
-      <button class="btn btn-primary" onclick="adminSkipToPassword()">Ir a contraseña final 🔑</button>
-      <button class="btn btn-primary" onclick="adminSkipToSurprise()">Ver pantalla Sorpresa 🎁</button>
+      <button class="btn btn-secondary" onclick="adminSkipTo(0)">Ir a reto 1 📝</button>
+      <button class="btn btn-secondary" onclick="adminSkipTo(5)">Ir a reto 6 📝</button>
+      <button class="btn btn-secondary" onclick="adminSkipTo(6)">Ir a reto EXTRA 📝</button>
+      <button class="btn btn-primary" onclick="adminSkipToArchive()">Ir a Archivo Final 📁</button>
+      <button class="btn btn-primary" onclick="adminSkipToSurprise()">Ver revelación final ✈️</button>
+      <button class="btn btn-ghost" onclick="adminReset()">🗑️ Borrar progreso guardado</button>
     </div>
     <button class="btn btn-ghost" onclick="closeAdmin()">Cerrar</button>
   </div>
@@ -237,220 +249,327 @@ Puedes usar emoticones: 🎂🥂✈️🇸🇪💛😊🎁</p>
 <div class="confetti-wrap" id="confetti"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   ⚙️ ZONA DE CONFIGURACIÓN — AQUÍ EDITAS TODO LO IMPORTANTE
-   ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════ ⚙️ CONFIGURACIÓN ═══════════════ */
 
-/* 🔓 FECHA Y HORA DE APERTURA
-   Lunes 5 de octubre de 2026, 19:00 hora de Estocolmo (UTC+2 en octubre).
-   Formato: Date.UTC(año, mes-1, día, horaUTC, minutos)
-   19:00 Estocolmo = 17:00 UTC → por eso va 17. */
+/* 🔓 RETO 1: lunes 5 de octubre de 2026, 19:00 Estocolmo (UTC+2 → 17:00 UTC).
+   Un reto por día durante 7 días. */
 const UNLOCK_UTC = Date.UTC(2026, 9, 5, 17, 0, 0);
+const HOURS_BETWEEN = 24;
 
-/* 🔑 CONTRASEÑA FINAL = las letras de cada prueba, en orden.
-   Si cambias las letras en CHALLENGES, la contraseña cambia sola.
-   (También puedes escribirla manualmente aquí si prefieres otra palabra.) */
-function finalPassword(){ return CHALLENGES.map(c => c.letter).join('').toUpperCase(); }
-
-/* 🛠️ TU CONTRASEÑA SECRETA DE MODO PRUEBA (solo tú la sabes).
-   Cámbiala por lo que quieras. Con ella puedes saltar a cualquier
-   pantalla y probar que todo funciona sin esperar la fecha. */
+/* 🛠️ Contraseña del modo prueba */
 const ADMIN_PASSWORD = 'prueba123';
 
-/* ✏️ LAS 5 PRUEBAS — EDITA AQUÍ PREGUNTAS, OPCIONES Y LETRAS
-   - q: el enunciado de la prueba
-   - opts: las 4 opciones de respuesta
-   - correct: número (0-3) de la opción correcta (0 = la primera)
-   - letter: LA LETRA que se revela si acierta (¡que formen una palabra!)
-   - good / bad: mensajes si acierta o falla
-   💡 Las 5 letras en orden forman la palabra final (ej: A-M-O-R-X) */
+/* ✏️ LOS 7 RETOS (del PDF).
+   - gif: nombre del archivo GIF que guardaste junto a este HTML (ej: "reto1.gif").
+     Si lo dejas en null, se muestra el emoji. ⚠️ Usa minúsculas/sin tildes en el nombre.
+   - codeVideo (solo reto del gallo): nombre del archivo de video con sonido
+     (ej: "gallo.mp4"), se reproduce en la pantalla del código. null = sin video.
+   - q: enunciado  |  opts: opciones  |  correct: índice (0 en adelante)
+   - code: el código numérico que entrega (null en el reto extra)
+   - explain: la explicación, SOLO se muestra al acertar (pantalla del código)
+   - good: mensaje al acertar  |  bad: mensaje al fallar (SIN revelar la respuesta) */
 const CHALLENGES = [
-  { q:"¿PREGUNTA 1? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"S",
-    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
-  { q:"¿PREGUNTA 2? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"O",
-    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
-  { q:"¿PREGUNTA 3? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"R",
-    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
-  { q:"¿PREGUNTA 4? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"P",
-    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" },
-  { q:"¿PREGUNTA 5? ✏️ Edítame", opts:["Opción A","Opción B","Opción C","Opción D"], correct:0, letter:"R",
-    good:"¡Correcto! 🎉", bad:"¡Ups! Intenta de nuevo 🙈" }
+  {
+    day:"DÍA 1", emoji:"🎣", gif:"reto1.gif", codeVideo:null, code:"03",
+    q:"RETO 1 — EL VIAJE DE PESCA 🐟\nDos padres y dos hijos fueron a pescar. Cada uno pescó exactamente un pez. Al regresar a casa llevaban 3 peces en total.\n¿Cómo es posible?",
+    opts:["A. Uno de ellos perdió un pez","B. Uno de ellos no pescó realmente","C. Eran solamente 3 personas","D. Uno de los peces era compartido"],
+    correct:2,
+    explain:"✅ RESPUESTA: C. Eran 3 personas.\n\nLas tres personas eran:\n• El ABUELO\n• El PADRE\n• El HIJO\n\nEl abuelo es padre. El padre es, al mismo tiempo, hijo y padre. Y el hijo es hijo. Por eso son dos padres y dos hijos, pero solamente 3 personas.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... piénsenlo de nuevo 👀"
+  },
+  {
+    day:"DÍA 2", emoji:"🔢", gif:"reto2.gif", codeVideo:null, code:"02",
+    q:"RETO 2 — EL NÚMERO ESCONDIDO 🔢\nObserven cuidadosamente la secuencia:\n2 — 6 — 12 — 20 — 30 — ?\n¿Qué número debería seguir?",
+    opts:["A. 36","B. 40","C. 42","D. 44"],
+    correct:2,
+    explain:"✅ RESPUESTA: C. 42\n\nLa secuencia sigue esta lógica:\n1 × 2 = 2\n2 × 3 = 6\n3 × 4 = 12\n4 × 5 = 20\n5 × 6 = 30\n6 × 7 = 42",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... revisen la lógica de la secuencia 🤔"
+  },
+  {
+    day:"DÍA 3", emoji:"🐓", gif:"reto3.gif", codeVideo:"rickroll.mp4", code:"05",
+    q:"RETO 3 — PREGUNTA TRAMPA 😂\nUn gallo pone un huevo encima de un tejado. El tejado está inclinado hacia la izquierda.\n¿Hacia qué lado cae el huevo?",
+    opts:["A. Izquierda","B. Derecha","C. Hacia abajo","D. Ninguno de los anteriores"],
+    correct:3,
+    explain:"✅ RESPUESTA: D. Ninguno.\n\nPorque... ¡LOS GALLOS NO PONEN HUEVOS! 🤣\nLa trampa estaba en la primera frase.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... lean la primera frase OTRA vez 👀"
+  },
+  {
+    day:"DÍA 4", emoji:"🦇", gif:"reto4.gif", codeVideo:null, code:"01",
+    q:"RETO 4 — LA PALABRA ESCONDIDA 🧠\nUtilizando únicamente letras de la palabra MURCIÉLAGO, ¿cuál de las siguientes palabras puede formarse sin repetir ninguna letra?",
+    opts:["A. CIELO","B. CAMISA","C. GUITARRA","D. PERRO"],
+    correct:0,
+    explain:"✅ RESPUESTA: A. CIELO\n\nLas letras necesarias son: C — I — E — L — O\nTodas aparecen en MURCIÉLAGO y ninguna se repite.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... cuenten las letras de cada opción 🔤"
+  },
+  {
+    day:"DÍA 5", emoji:"🧪", gif:"reto5.gif", codeVideo:null, code:"04",
+    q:"RETO 5 — ¡QUE NO EXPLOTE! 💥\nUn científico loco ha dejado una sustancia desconocida sobre la mesa. Antes de tocarla necesitan responder: ¿qué sucede generalmente cuando se mezcla un ácido con una base?",
+    opts:["A. Combustión","B. Neutralización","C. Evaporación instantánea","D. Congelación"],
+    correct:1,
+    explain:"✅ RESPUESTA: B. Neutralización.\n\nCuando un ácido y una base reaccionan, generalmente ocurre una reacción de neutralización, en la que se forman nuevas sustancias, habitualmente una sal y agua.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... el laboratorio sigue en peligro 💥"
+  },
+  {
+    day:"DÍA 6", emoji:"⚖️", gif:"reto6.gif", codeVideo:null, code:"02",
+    q:"RETO 6 — ¿CULPABLE... O NO? 🧑‍⚖️\nUna persona es acusada de cometer un delito. Sin embargo, todavía no existe una sentencia que determine que es culpable.\n¿Qué significa la presunción de inocencia?",
+    opts:["A. Que nunca puede ser condenada","B. Que debe ser considerada inocente mientras no exista una condena","C. Que la policía debe creerle siempre","D. Que puede ignorar cualquier investigación"],
+    correct:1,
+    explain:"✅ RESPUESTA: B.\n\nLa presunción de inocencia significa que una persona debe ser tratada como inocente mientras no exista una decisión judicial que establezca su culpabilidad, de acuerdo con las reglas aplicables.",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... piensen en el 'mientras no exista condena' ⚖️"
+  },
+  {
+    day:"DÍA 7", emoji:"🧮", gif:"reto7.gif", codeVideo:null, code:null,
+    q:"RETO EXTRA — EL PADRE Y EL HIJO 👨‍👦\nUn padre tiene 45 años y su hijo tiene 15 años.\n¿En cuántos años el padre tendrá exactamente el doble de la edad de su hijo?",
+    opts:["A. 10","B. 15","C. 20","D. Nunca"],
+    correct:1,
+    explain:"✅ RESPUESTA: B. 15 años.\n\nEn 15 años:\nPadre: 45 + 15 = 60 años\nHijo: 15 + 15 = 30 años\n\nY: 60 = 2 × 30 ✔️\n\nEste reto es especial: no entrega código... todavía falta descubrir qué papel juega en la misión. 📁",
+    good:"¡Prueba superada! 🎉",
+    bad:"❌ Incorrecto... prueben con una ecuación 🧮"
+  }
 ];
-/* ☝️ Con las letras de arriba la palabra final sería "SORPR".
-   Cámbialas para que formen TU palabra (ej: AMOR, FELIZ, SORPRESA...).
-   Si quieres más de 5 letras, agrega más objetos al arreglo. */
 
-/* ═══════════════════════════════════════════════════════════════════
-   FIN DE LA ZONA DE CONFIGURACIÓN — de aquí en adelante es la lógica
-   (no necesitas tocar nada, salvo que quieras cambiar textos fijos)
-   ═══════════════════════════════════════════════════════════════════ */
+/* 📁 Archivo Final: palabras + posición (según los códigos del PDF) */
+const ARCHIVE_WORDS = ["MESA","LUNA","VERDE","CIELO","AQUÍ","PATO"];
+const ARCHIVE_POSITIONS = [3,2,5,1,4,2]; // los códigos 03-02-05-01-04-02
+const FINAL_WORD = "SUECIA";
+
+/* ═══════════════ LÓGICA DEL JUEGO ═══════════════ */
 
 let currentIndex = 0;
-let lettersEarned = [];
-let answered = false;
-let isAdmin = false; // true cuando entras con la contraseña de prueba
+let isAdmin = false;
+let clockInterval = null;
 
+/* ─── 💾 Progreso ─── */
+const CACHE_KEY = 'archivoX_v2';
+function saveProgress(data){ try{ localStorage.setItem(CACHE_KEY, JSON.stringify(data)); }catch(e){} }
+function loadProgress(){ try{ const r = localStorage.getItem(CACHE_KEY); return r ? JSON.parse(r) : { codes:[null,null,null,null,null,null], extraDone:false, finished:false, codesRevealed:false }; }catch(e){ return { codes:[null,null,null,null,null,null], extraDone:false, finished:false, codesRevealed:false }; } }
+function clearProgress(){ try{ localStorage.removeItem(CACHE_KEY); }catch(e){} }
+function codesCount(){ return loadProgress().codes.filter(Boolean).length; }
+
+/* ─── Navegación ─── */
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
+function goIntro(){ updateIntro(); showScreen('screen-intro'); }
 
-function isUnlocked(){ return isAdmin || Date.now() >= UNLOCK_UTC; }
+function updateIntro(){
+  const p = loadProgress();
+  const done = codesCount();
+  const btn = document.getElementById('btn-start');
+  if(p.finished) btn.textContent = 'Ver la revelación final ✈️';
+  else if(p.extraDone) btn.textContent = 'Abrir el Archivo Final 📁';
+  else if(done >= 6) btn.textContent = 'Continuar: Día 7 — Reto EXTRA 🧮';
+  else if(done > 0) btn.textContent = `Continuar la misión (${done}/6 códigos) ➡️`;
+  else btn.textContent = '¿Aceptan el reto? 🟢';
+  document.getElementById('intro-progress').textContent =
+    done > 0 ? `Progreso guardado automáticamente 💾 (${done}/6 códigos)` : '';
+}
 
-/* ─── Inicio del juego ─── */
+/* ─── Desbloqueo diario ─── */
+function stageUnlockTime(i){ return UNLOCK_UTC + i * HOURS_BETWEEN * 3600000; }
+function isStageOpen(i){ return isAdmin || Date.now() >= stageUnlockTime(i); }
+
+/* ─── Inicio ─── */
 function startGame(){
-  if(!isUnlocked()){ showScreen('screen-early'); startClocks(); return; }
-  currentIndex = 0; lettersEarned = [];
-  loadChallenge(0);
+  if(clockInterval){ clearInterval(clockInterval); clockInterval = null; }
+  const p = loadProgress();
+  if(p.finished){ launchConfetti(25); showScreen('screen-surprise'); return; }
+  if(p.extraDone){ showArchive(); return; }
+  let target = 0;
+  while(target < 6 && p.codes[target]) target++;
+  if(target < 6 && !isStageOpen(target)){
+    document.getElementById('early-text').innerHTML =
+      `La <strong style="color:var(--accent)">prueba ${target+1}</strong> se desbloquea a las <strong style="color:var(--accent)">19:00</strong> (hora de Estocolmo) 🇸🇪<br><br>Mientras tanto, a cuidar esos códigos 🧠🔢`;
+    startClocks(target);
+    showScreen('screen-early');
+    return;
+  }
+  if(target >= 6 && !p.extraDone && !isStageOpen(6)){
+    document.getElementById('early-text').innerHTML =
+      `El <strong style="color:var(--accent)">RETO EXTRA</strong> se desbloquea a las <strong style="color:var(--accent)">19:00</strong> (hora de Estocolmo) 🇸🇪<br><br>Última prueba antes del Archivo Final... 📁`;
+    startClocks(6);
+    showScreen('screen-early');
+    return;
+  }
+  loadChallenge(target);
   showScreen('screen-challenge');
 }
 
-/* ─── Reloj Estocolmo + cuenta regresiva (pantalla "todavía no") ─── */
-let clockInterval = null;
-function startClocks(){
+/* ─── Reloj + cuenta regresiva ─── */
+function startClocks(targetIndex){
   if(clockInterval) clearInterval(clockInterval);
+  const target = stageUnlockTime(targetIndex);
   const fmt = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   const fmtDay = new Intl.DateTimeFormat('es-CO',{timeZone:'Europe/Stockholm',weekday:'long',day:'numeric',month:'long'});
   function tick(){
-    // Hora actual de Estocolmo
     document.getElementById('clock-time').textContent = fmt.format(new Date());
-    const diff = UNLOCK_UTC - Date.now();
-    if(diff <= 0){ clearInterval(clockInterval); startGame(); return; }
+    const diff = target - Date.now();
+    if(diff <= 0){ clearInterval(clockInterval); clockInterval = null; startGame(); return; }
     const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000),
           m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
     document.getElementById('countdown-time').textContent =
       (d>0 ? String(d)+'d ' : '') + `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     document.getElementById('countdown-days').textContent =
-      `📅 Será el ${fmtDay.format(new Date(UNLOCK_UTC))} a las 19:00 🇸🇪`;
+      `📅 Se abre el ${fmtDay.format(new Date(target))} a las 19:00 🇸🇪`;
   }
   tick(); clockInterval = setInterval(tick, 1000);
 }
 
-/* ─── Cargar prueba actual ─── */
+/* ─── Cargar prueba ─── */
 function loadChallenge(i){
   currentIndex = i;
-  answered = false;
   const ch = CHALLENGES[i];
-  document.getElementById('challenge-num').textContent = `Prueba ${i+1} de ${CHALLENGES.length}`;
+  const mediaEl = document.getElementById('challenge-emoji');
+  if(ch.gif){
+    mediaEl.innerHTML = `<img class="challenge-gif" src="${ch.gif}" alt="reto" onerror="this.parentElement.textContent='${ch.emoji}'">`;
+  } else {
+    mediaEl.textContent = ch.emoji;
+  }
+  document.getElementById('challenge-num').textContent = ch.day + (ch.code ? '' : ' — RETO EXTRA');
   document.getElementById('challenge-text').textContent = ch.q;
-  document.getElementById('progress-text').textContent = `Prueba ${i+1} / ${CHALLENGES.length}`;
-  document.getElementById('progress-fill').style.width = `${(i/CHALLENGES.length)*100}%`;
+  document.getElementById('progress-text').textContent = `Día ${i+1} / 7`;
+  document.getElementById('progress-fill').style.width = `${(i/7)*100}%`;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('btn-next').style.display = 'none';
-  renderLetters();
   const optsEl = document.getElementById('opts');
   optsEl.innerHTML = '';
   ch.opts.forEach((opt, idx) => {
     const btn = document.createElement('button');
     btn.className = 'opt'; btn.textContent = opt;
-    btn.onclick = () => answer(idx);
+    btn.onclick = () => answer(idx, btn);
     optsEl.appendChild(btn);
   });
 }
 
-/* ─── Dibujar las letras ganadas / pendientes ─── */
-function renderLetters(){
-  const row = document.getElementById('letters-row');
-  row.innerHTML = '';
-  CHALLENGES.forEach((c, idx) => {
-    const slot = document.createElement('div');
-    const earned = lettersEarned[idx];
-    slot.className = 'letter-slot' + (earned ? ' got' : '');
-    slot.textContent = earned ? earned : '?';
-    row.appendChild(slot);
-  });
-}
-
-/* ─── Responder la prueba ─── */
-function answer(chosen){
-  if(answered) return;
-  answered = true;
+/* ─── Responder: fallar NO revela la respuesta correcta ─── */
+function answer(chosen, btnEl){
   const ch = CHALLENGES[currentIndex];
-  const opts = document.querySelectorAll('.opt');
-  opts.forEach(b => b.disabled = true);
   const fb = document.getElementById('feedback');
   if(chosen === ch.correct){
-    opts[chosen].classList.add('correct');
+    document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+    btnEl.classList.add('correct');
     fb.textContent = '✅ ' + ch.good; fb.className = 'feedback good';
-    lettersEarned[currentIndex] = ch.letter;
-    renderLetters();
     const btnNext = document.getElementById('btn-next');
     btnNext.style.display = 'block';
-    btnNext.textContent = 'Revelar mi letra 🔓';
-    btnNext.onclick = showLetter;
+    btnNext.textContent = ch.code ? 'Revelar mi código 🔓' : 'Continuar ➡️';
+    btnNext.onclick = () => showCodeScreen();
+    const p = loadProgress();
+    if(ch.code) p.codes[currentIndex] = ch.code;
+    else p.extraDone = true;
+    saveProgress(p);
   } else {
-    opts[chosen].classList.add('wrong');
-    opts[ch.correct].classList.add('reveal');
-    fb.textContent = '❌ ' + ch.bad; fb.className = 'feedback bad';
-    const btnNext = document.getElementById('btn-next');
-    btnNext.style.display = 'block';
-    btnNext.textContent = 'Reintentar 🔄';
-    btnNext.onclick = () => loadChallenge(currentIndex); // se puede reintentar
+    btnEl.classList.add('wrong');
+    btnEl.disabled = true;
+    fb.textContent = ch.bad; fb.className = 'feedback bad';
   }
 }
+function nextAfterAnswer(){}
 
-/* ─── Mostrar la letra ganada ─── */
-function showLetter(){
-  document.getElementById('letter-big').textContent = CHALLENGES[currentIndex].letter;
+/* ─── Pantalla del código (explicación SOLO aquí) ─── */
+function showCodeScreen(){
+  const ch = CHALLENGES[currentIndex];
+  if(ch.code === null){
+    // Reto extra resuelto → DIRECTO al Archivo Final
+    showArchive();
+    return;
+  }
+  document.getElementById('code-big').textContent = ch.code;
+  document.getElementById('code-explain').textContent = ch.explain;
+  const media = document.getElementById('code-media');
+  if(ch.codeVideo){
+    media.innerHTML = `<video controls autoplay playsinline style="width:100%;border-radius:14px;" src="${ch.codeVideo}"></video>`;
+  } else {
+    media.innerHTML = '';
+  }
   launchConfetti(15);
-  showScreen('screen-letter');
+  showScreen('screen-code');
 }
+function afterCode(){ goIntro(); }
 
-/* ─── Después de ver la letra: siguiente prueba o contraseña final ─── */
-function afterLetter(){
-  if(currentIndex < CHALLENGES.length - 1){
-    loadChallenge(currentIndex + 1);
-    showScreen('screen-challenge');
-  } else {
-    showPasswordScreen();
-  }
-}
-
-/* ─── Pantalla de contraseña final ─── */
-function showPasswordScreen(){
-  document.getElementById('progress-fill').style.width = '100%';
-  renderLettersFinal();
-  document.getElementById('password-input').value = '';
-  document.getElementById('password-error').textContent = '';
-  showScreen('screen-password');
-}
-
-function renderLettersFinal(){
-  const row = document.getElementById('letters-row-final');
-  row.innerHTML = '';
-  CHALLENGES.forEach((c, idx) => {
-    const slot = document.createElement('div');
-    const earned = lettersEarned[idx];
-    slot.className = 'letter-slot' + (earned ? ' got' : '');
-    slot.textContent = earned ? earned : '?';
-    row.appendChild(slot);
+/* ─── Archivo Final ─── */
+function showArchive(){
+  const p = loadProgress();
+  const grid = document.getElementById('word-grid');
+  grid.innerHTML = '';
+  ARCHIVE_WORDS.forEach((w, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'word-cell';
+    // Los códigos NO se muestran: ellos deben recordar cómo usarlos.
+    // Solo aparecen si aceptaron el castigo (codesRevealed).
+    cell.innerHTML = `<div class="word-num">Archivo 0${i+1}</div>
+      <div class="word-name">${w}</div>` +
+      (p.codesRevealed ? `<div class="word-code">Código: 🔢 ${p.codes[i] || '?'}</div>` : '');
+    grid.appendChild(cell);
   });
+  document.getElementById('archive-input').value = '';
+  document.getElementById('archive-error').textContent = '';
+  showScreen('screen-archive');
 }
-
-function checkFinalPassword(){
-  const val = document.getElementById('password-input').value.trim().toUpperCase();
-  if(val === finalPassword()){
+function normalize(s){ return s.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function checkArchive(){
+  const val = normalize(document.getElementById('archive-input').value);
+  if(val === FINAL_WORD){
+    const p = loadProgress(); p.finished = true; saveProgress(p);
     launchConfetti(30);
     showScreen('screen-surprise');
     setTimeout(() => launchConfetti(30), 500);
   } else {
-    document.getElementById('password-error').textContent = 'Palabra incorrecta... revisa tus letras 🔤🙈';
+    document.getElementById('archive-error').textContent = 'Palabra incorrecta... extraigan bien las letras con sus códigos 🔢🙈';
   }
 }
 
-/* ─── ⚙️ MODO PRUEBA (solo tú): revisar todo sin restricciones ─── */
+/* ─── 😈 Castigo: recuperar códigos ─── */
+let mathAnswer = 0;
+function openForgot(){
+  newMathProblem();
+  document.getElementById('math-input').value = '';
+  document.getElementById('math-error').textContent = '';
+  document.getElementById('forgot-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('math-input').focus(), 100);
+}
+function closeForgot(){ document.getElementById('forgot-modal').style.display = 'none'; }
+function newMathProblem(){
+  const a = 12 + Math.floor(Math.random()*25);
+  const b = 6  + Math.floor(Math.random()*9);
+  const c = 40 + Math.floor(Math.random()*80);
+  const d = 7  + Math.floor(Math.random()*18);
+  mathAnswer = a*b + (c-d);
+  document.getElementById('math-problem').textContent = `( ${a} × ${b} ) + ( ${c} − ${d} ) = ?`;
+}
+function checkMath(){
+  const val = parseInt(document.getElementById('math-input').value, 10);
+  if(val === mathAnswer){
+    document.getElementById('forgot-modal').style.display = 'none';
+    const p = loadProgress();
+    for(let i = 0; i < 6; i++) if(!p.codes[i]) p.codes[i] = CHALLENGES[i].code;
+    p.codesRevealed = true; // castigo cumplido: ahora sí se muestran los códigos
+    saveProgress(p);
+    showArchive();
+  } else {
+    document.getElementById('math-error').textContent = '❌ ¡Incorrecto! Nueva operación, suerte la próxima 😈';
+    document.getElementById('math-input').value = '';
+    newMathProblem();
+  }
+}
+
+/* ─── ⚙️ Modo prueba ─── */
 function openAdmin(){
   document.getElementById('admin-input').value = '';
   document.getElementById('admin-error').textContent = '';
   document.getElementById('admin-actions').style.display = 'none';
-  const m = document.getElementById('admin-modal');
-  m.style.display = 'flex';
+  document.getElementById('admin-modal').style.display = 'flex';
   setTimeout(() => document.getElementById('admin-input').focus(), 100);
 }
 function closeAdmin(){ document.getElementById('admin-modal').style.display = 'none'; }
-
 function checkAdmin(){
   const val = document.getElementById('admin-input').value.trim();
   if(val === ADMIN_PASSWORD){
@@ -463,28 +582,28 @@ function checkAdmin(){
     document.getElementById('admin-input').value = '';
   }
 }
-
-/* Saltar a cualquier parte para probar (requiere modo prueba activado) */
 function adminSkipTo(i){
-  currentIndex = i; lettersEarned = [];
-  for(let k = 0; k < i; k++) lettersEarned[k] = CHALLENGES[k].letter; // letras anteriores como ganadas
-  loadChallenge(i);
-  closeAdmin();
-  showScreen('screen-challenge');
+  const p = loadProgress();
+  for(let k = 0; k < Math.min(i,6); k++) p.codes[k] = CHALLENGES[k].code;
+  if(i >= 6) p.extraDone = false;
+  saveProgress(p);
+  closeAdmin(); loadChallenge(i); showScreen('screen-challenge');
 }
-function adminSkipToPassword(){
-  lettersEarned = CHALLENGES.map(c => c.letter); // todas las letras ganadas
-  closeAdmin();
-  showPasswordScreen();
+function adminSkipToArchive(){
+  const p = loadProgress();
+  for(let k = 0; k < 6; k++) p.codes[k] = CHALLENGES[k].code;
+  p.extraDone = true; saveProgress(p);
+  closeAdmin(); showArchive();
 }
 function adminSkipToSurprise(){
-  lettersEarned = CHALLENGES.map(c => c.letter);
-  closeAdmin();
-  launchConfetti(30);
-  showScreen('screen-surprise');
+  const p = loadProgress();
+  for(let k = 0; k < 6; k++) p.codes[k] = CHALLENGES[k].code;
+  p.extraDone = true; p.finished = true; saveProgress(p);
+  closeAdmin(); launchConfetti(30); showScreen('screen-surprise');
 }
+function adminReset(){ clearProgress(); document.getElementById('admin-error').textContent = '✅ Progreso borrado'; }
 
-/* ─── Confeti y celebración ─── */
+/* ─── Confeti ─── */
 function celebrate(){ launchConfetti(40); }
 function launchConfetti(count){
   const container = document.getElementById('confetti');
@@ -502,6 +621,8 @@ function launchConfetti(count){
 const st = document.createElement('style');
 st.textContent = '@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}';
 document.head.appendChild(st);
+
+updateIntro();
 </script>
 </body>
 </html>
